@@ -7,6 +7,8 @@ public class MovieDbContext : DbContext
 {
     public DbSet<Title> Titles { get; set; }
     public DbSet<Person> Persons { get; set; }
+    public DbSet<Crew> Crew { get; set; }
+    public DbSet<Alias> Aliases { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -23,5 +25,6 @@ public class MovieDbContext : DbContext
         
         modelBuilder.Entity<Person>().ToTable("persons").HasKey(x=>new{x.Nconst});
 
+        modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x=>new{x.Tconst, x.Ordering});
     }
 }
