@@ -6,6 +6,7 @@ namespace DataLayer;
 public class MovieDbContext : DbContext
 {
     public DbSet<Title> Titles { get; set; }
+    public DbSet<Person> Persons { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -19,6 +20,8 @@ public class MovieDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Title>().ToTable("titles").HasKey(x=>new{x.Tconst});
+        
+        modelBuilder.Entity<Person>().ToTable("persons").HasKey(x=>new{x.Nconst});
 
     }
 }

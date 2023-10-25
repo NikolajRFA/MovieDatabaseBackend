@@ -2,7 +2,7 @@ using DataLayer;
 
 namespace DataLayerTests;
 
-public class UnitTest1
+public class MovieDbContextTests
 {
     [Fact]
     public void ConnectToDb_NoActions_DoesNotFail()
@@ -15,5 +15,12 @@ public class UnitTest1
     {
         var db = new MovieDbContext();
         Assert.Equal(10, db.Titles.Take(10).Count());
+    }
+
+    [Fact]
+    public void GetPersons_Top10Persons_Gets10Persons()
+    {
+        var db = new MovieDbContext();
+        Assert.Equal(10, db.Persons.Take(10).Count());
     }
 }
