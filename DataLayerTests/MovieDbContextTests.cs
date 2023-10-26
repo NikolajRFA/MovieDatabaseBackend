@@ -59,4 +59,24 @@ public class MovieDbContextTests
             .Count();
         Assert.Equal(10, count);
     }
+
+    [Fact]
+    public void GetGenres_Top10Genres_Gets10Genres()
+    {
+        var db = new MovieDbContext();
+        var count = db.Genres.Take(10).Count();
+        Assert.Equal(10, count);
+    }
+
+    [Fact]
+    public void GetHasGenre_Top10Items_Gets10Items()
+    {
+        var db = new MovieDbContext();
+        var count = db.HasGenre
+            .Include(x => x.Genre)
+            .Include(x => x.Title)
+            .Take(10)
+            .Count();
+        Assert.Equal(10, count);
+    }
 }
