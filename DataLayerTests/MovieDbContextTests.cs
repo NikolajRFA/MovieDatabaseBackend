@@ -99,4 +99,12 @@ public class MovieDbContextTests
             .Count();
         Assert.Equal(10, count);
     }
+
+    [Fact]
+    public void GetWi_Top10Wi_Gets10Wi()
+    {
+        var db = new MovieDbContext();
+        var count = db.Wi.Take(10).Count();
+        Assert.Equal(10, count);
+    }
 }

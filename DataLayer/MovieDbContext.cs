@@ -14,6 +14,7 @@ public class MovieDbContext : DbContext
     public DbSet<HasGenre> HasGenre { get; set; }
     public DbSet<Profession> Professions { get; set; }
     public DbSet<HasProfession> HasProfession { get; set; }
+    public DbSet<Wi> Wi { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -37,5 +38,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<HasGenre>().ToTable("has_genre").HasKey(x => new { x.Id, x.Tconst });
 
         modelBuilder.Entity<HasProfession>().ToTable("has_profession").HasKey(x => new { x.Nconst, x.ProfessionId });
+        
+        modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
     }
 }
