@@ -16,9 +16,10 @@ public class MovieDbContext : DbContext
     public DbSet<Profession> Professions { get; set; }
     public DbSet<HasProfession> HasProfession { get; set; }
     public DbSet<Wi> Wi { get; set; }
-    
+
     // Framework database
     public DbSet<User> Users { get; set; }
+    public DbSet<Search> Searches { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -39,8 +40,13 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<HasGenre>().ToTable("has_genre").HasKey(x => new { x.Id, x.Tconst });
         modelBuilder.Entity<HasProfession>().ToTable("has_profession").HasKey(x => new { x.Nconst, x.ProfessionId });
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
-        
+
         // Framework database
-        
+        modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
+        modelBuilder.Entity<User>()
+            .HasMany(x => x.Searches)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.Id);
+        //modelBuilder.Entity<Searches>().Property(x => x.Id).HasColumnName("id");
     }
 }

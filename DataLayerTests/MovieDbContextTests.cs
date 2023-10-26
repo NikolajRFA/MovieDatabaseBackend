@@ -115,4 +115,18 @@ public class MovieDbContextTests
         var count = db.Users.Take(1).Count();
         Assert.Equal(1, count);
     }
+
+    [Fact]
+    public void GetFirstSearchFromUser_UserNiko_GetsNikosSearches()
+    {
+        var db = new MovieDbContext();
+        var firstSearchPhrase = db.Users
+            .Include(x => x.Searches)
+            .First(x => x.Username.Equals("Niko"))
+            .Searches
+            .OrderBy(x => x.Date)
+            .First()
+            .SearchPhrase;
+        Assert.Equal("star wars", firstSearchPhrase);
+    }
 }
