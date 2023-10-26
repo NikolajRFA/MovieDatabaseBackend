@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,17 @@ public class MovieDbContextTests
         var db = new MovieDbContext();
         var count = db.Aliases
             .Include(x => x.ThisTitle)
+            .Take(10)
+            .Count();
+        Assert.Equal(10, count);
+    }
+
+    [Fact]
+    public void GetIsEpisodeOf_Top10Items_Gets10Items()
+    {
+        var db = new MovieDbContext();
+        var count = db.IsEpisodeOf
+            .Include(x => x.Title).Include(x => x.ParentTitle)
             .Take(10)
             .Count();
         Assert.Equal(10, count);
