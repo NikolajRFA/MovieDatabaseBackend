@@ -10,4 +10,5 @@ public class Alias
     public string Types { get; set; }
     public string Attributes { get; set; }
     public bool IsOriginalTitle { get; set; }
+    public Title ThisTitle { get; set; }
 }

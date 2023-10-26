@@ -9,4 +9,6 @@ public class Crew
     public string Category { get; set; }
     public string Job { get; set; } 
     public string Character { get; set; }
+    public Title Title { get; set; }
+    public Person Person { get; set; }
 }

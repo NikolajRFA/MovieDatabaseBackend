@@ -1,4 +1,5 @@
 using DataLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataLayerTests;
 
@@ -28,13 +29,22 @@ public class MovieDbContextTests
     public void GetCrew_Top10Crew_Gets10Crew()
     {
         var db = new MovieDbContext();
-        Assert.Equal(10, db.Crew.Take(10).Count());
+        var count = db.Crew
+            .Include(x => x.Person)
+            .Include(x => x.Title)
+            .Take(10)
+            .Count();
+        Assert.Equal(10, count);
     }
 
     [Fact]
     public void GetAliases_Top10Aliases_Gets10Aliases()
     {
         var db = new MovieDbContext();
-        Assert.Equal(10, db.Aliases.Take(10).Count());
+        var count = db.Aliases
+            .Include(x => x.ThisTitle)
+            .Take(10)
+            .Count();
+        Assert.Equal(10, count);
     }
 }
