@@ -79,4 +79,24 @@ public class MovieDbContextTests
             .Count();
         Assert.Equal(10, count);
     }
+    
+    [Fact]
+    public void GetProfessions_Top10Professions_Gets10Professions()
+    {
+        var db = new MovieDbContext();
+        var count = db.Professions.Take(10).Count();
+        Assert.Equal(10, count);
+    }
+
+    [Fact]
+    public void GetHasProfession_Top10Items_Gets10Items()
+    {
+        var db = new MovieDbContext();
+        var count = db.HasProfession
+            .Include(x => x.Person)
+            .Include(x => x.Profession)
+            .Take(10)
+            .Count();
+        Assert.Equal(10, count);
+    }
 }
