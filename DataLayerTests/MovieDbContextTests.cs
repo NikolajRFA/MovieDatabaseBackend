@@ -107,4 +107,12 @@ public class MovieDbContextTests
         var count = db.Wi.Take(10).Count();
         Assert.Equal(10, count);
     }
+
+    [Fact] // Will fail if no users are created
+    public void GetUser_GetFirstUser_Gets1User()
+    {
+        var db = new MovieDbContext();
+        var count = db.Users.Take(1).Count();
+        Assert.Equal(1, count);
+    }
 }
