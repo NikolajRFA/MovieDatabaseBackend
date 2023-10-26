@@ -117,7 +117,7 @@ public class MovieDbContextTests
     }
 
     [Fact]
-    public void GetFirstSearchFromUser_UserNiko_GetsNikosSearches()
+    public void GetFirstSearchFromUser_UserNiko_GetsStarWarsSearch()
     {
         var db = new MovieDbContext();
         var firstSearchPhrase = db.Users
