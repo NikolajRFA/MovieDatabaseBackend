@@ -13,4 +13,5 @@ public class Title
     public double AverageRating { get; set; }
     public int NumVotes { get; set; }
     public string Poster { get; set; }
+    public List<Genre> Genre { get; set; }
 }
