@@ -28,7 +28,7 @@ public class TitlesController : GenericControllerBase
         {
             dtos.Add(new TitleDto
             {
-                //Url = GetUrl(nameof(GetTitle), new{title.Tconst}),
+                Url = GetUrl(nameof(GetTitle), new{title.Tconst}),
                 Title = title.OriginalTitle,
                 TitleType = title.TitleType,
                 Poster = title.Poster,
@@ -45,7 +45,7 @@ public class TitlesController : GenericControllerBase
         return Ok(Paging(dtos, titles.titles.Count, page, pageSize, nameof(GetTitles)));
     }
 
-    [HttpGet("{tconst}")]
+    [HttpGet("{tconst}", Name = nameof(GetTitle))]
     public IActionResult GetTitle(string tconst)
     {
         var title = _dataService.GetTitle(tconst);

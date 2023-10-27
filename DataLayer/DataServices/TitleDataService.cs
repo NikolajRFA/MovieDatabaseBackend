@@ -12,7 +12,7 @@ public class TitleDataService
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToList();
-        return (titles, db.Titles.Count());
+        return (titles, db.Titles.ToList().Count);
     }
 
     public Title GetTitle(string tconst)
