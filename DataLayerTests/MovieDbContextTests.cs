@@ -139,7 +139,6 @@ public class MovieDbContextTests
             .First(x => x.Username.Equals("Niko")).Ratings
             .OrderBy(x => x.Date).First().ThisRating;
         Assert.Equal(1, firstRating);
-
     }
 
 }
