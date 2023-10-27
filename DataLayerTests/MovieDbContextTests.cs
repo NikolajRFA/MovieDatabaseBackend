@@ -64,19 +64,7 @@ public class MovieDbContextTests
     public void GetGenres_Top10Genres_Gets10Genres()
     {
         var db = new MovieDbContext();
-        var count = db.Genres.Take(10).Count();
-        Assert.Equal(10, count);
-    }
-
-    [Fact]
-    public void GetHasGenre_Top10Items_Gets10Items()
-    {
-        var db = new MovieDbContext();
-        var count = db.HasGenre
-            .Include(x => x.Genre)
-            .Include(x => x.Title)
-            .Take(10)
-            .Count();
+        var count = db.Genres.Include(x=>x.Title).Take(10).Count();
         Assert.Equal(10, count);
     }
     
@@ -84,19 +72,7 @@ public class MovieDbContextTests
     public void GetProfessions_Top10Professions_Gets10Professions()
     {
         var db = new MovieDbContext();
-        var count = db.Professions.Take(10).Count();
-        Assert.Equal(10, count);
-    }
-
-    [Fact]
-    public void GetHasProfession_Top10Items_Gets10Items()
-    {
-        var db = new MovieDbContext();
-        var count = db.HasProfession
-            .Include(x => x.Person)
-            .Include(x => x.Profession)
-            .Take(10)
-            .Count();
+        var count = db.Professions.Include(x => x.Person).Take(10).Count();
         Assert.Equal(10, count);
     }
 
@@ -151,5 +127,4 @@ public class MovieDbContextTests
             .OrderBy(x => x.Id).First();
         Assert.Equal("nm0000434", firstBookmark.Nconst.Trim());
     }
-
 }

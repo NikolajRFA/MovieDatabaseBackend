@@ -7,4 +7,5 @@ public class Person
     public int BirthYear { get; set; }
     public int DeathYear { get; set; }
     public double NameRating { get; set; }
+    public List<Profession> Profession { get; set; }
 }
