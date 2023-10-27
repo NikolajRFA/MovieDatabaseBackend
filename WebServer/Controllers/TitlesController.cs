@@ -28,7 +28,7 @@ public class TitlesController : GenericControllerBase
         {
             dtos.Add(new TitleDto
             {
-                Url = GetUrl(nameof(GetTitle), new{title.Tconst}),
+                Url = GetUrl(nameof(GetTitle), new{ tconst = title.Tconst.Trim()}),
                 Title = title.OriginalTitle,
                 TitleType = title.TitleType,
                 Poster = title.Poster,
@@ -42,7 +42,7 @@ public class TitlesController : GenericControllerBase
                 // Missing PersonalRatingDto, GenreDto, PersonDto
             });
         });
-        return Ok(Paging(dtos, titles.titles.Count, page, pageSize, nameof(GetTitles)));
+        return Ok(Paging(dtos, titles.count, page, pageSize, nameof(GetTitles)));
     }
 
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
@@ -51,7 +51,7 @@ public class TitlesController : GenericControllerBase
         var title = _dataService.GetTitle(tconst);
         var titleDto = new TitleDto
         {
-            //Url = GetUrl(nameof(GetTitle), new{}),
+            Url = GetUrl(nameof(GetTitle), new{ tconst = title.Tconst.Trim()}),
             Title = title.OriginalTitle,
             TitleType = title.TitleType,
             Poster = title.Poster,

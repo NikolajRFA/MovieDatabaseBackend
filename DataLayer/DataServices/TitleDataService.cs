@@ -1,4 +1,5 @@
-﻿using DataLayer.DbSets;
+﻿using System.Diagnostics.CodeAnalysis;
+using DataLayer.DbSets;
 
 namespace DataLayer.DataServices;
 
@@ -7,12 +8,13 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitles(int page, int pageSize)
     {
         var db = new MovieDbContext();
+        var count = db.Titles.Count();
         var titles =
             db.Titles
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToList();
-        return (titles, db.Titles.ToList().Count);
+        return (titles, count);
     }
 
     public Title GetTitle(string tconst)
