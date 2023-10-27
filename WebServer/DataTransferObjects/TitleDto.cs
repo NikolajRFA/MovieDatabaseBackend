@@ -1,4 +1,6 @@
-﻿namespace DataLayer.DataTransferObjects;
+﻿using WebServer.DataTransferObjects;
+
+namespace DataLayer.DataTransferObjects;
 
 public class TitleDto
 {
