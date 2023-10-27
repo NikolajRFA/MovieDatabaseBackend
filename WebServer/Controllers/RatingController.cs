@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using DataLayer.DataServices;
+using Microsoft.AspNetCore.Mvc;
+using WebServer.Models;
 
-namespace WebServer.Controllers
+namespace WebServer.Controllers;
+
+[Route("api/user/{userId:int}/rating")]
+[ApiController]
+public class RatingController : GenericControllerBase
 {
-    public class RatingController
+    private readonly RatingDataService _dataService;
+
+    public RatingController(RatingDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
+        linkGenerator, mapper)
     {
-        
-        /*public IActionResult Index()
-        {
-            return new Ok();
-        }*/
+        _dataService = dataService;
     }
 }
