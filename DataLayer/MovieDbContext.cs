@@ -22,7 +22,8 @@ public class MovieDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Search> Searches { get; set; }
     public DbSet<Rating> Rated { get; set; }
-
+    public DbSet<Bookmark> Bookmarks { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.EnableSensitiveDataLogging();
@@ -55,5 +56,6 @@ public class MovieDbContext : DbContext
             .HasForeignKey(x => x.Id);
         modelBuilder.Entity<Rating>().ToTable("rated").HasKey(x => new { x.Tconst, x.Id });
         modelBuilder.Entity<Rating>().Property(x => x.ThisRating).HasColumnName("rating");
+        modelBuilder.Entity<Bookmark>().ToTable("bookmark");
     }
 }

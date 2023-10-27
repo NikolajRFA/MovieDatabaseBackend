@@ -41,7 +41,9 @@ public partial class AutomatedDbContext : DbContext
     public virtual DbSet<Wi> Wis { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. 
+#warning    You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - 
+#warning    see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("host=cit.ruc.dk;db=cit06;uid=cit06;pwd=sTF6Cwwe1qXG");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -280,7 +282,7 @@ public partial class AutomatedDbContext : DbContext
                 .HasColumnName("date");
             entity.Property(e => e.Rating).HasColumnName("rating");
 
-            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Rateds)
+            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Ratings)
                 .HasForeignKey(d => d.Id)
                 .HasConstraintName("rated_id_fkey");
 

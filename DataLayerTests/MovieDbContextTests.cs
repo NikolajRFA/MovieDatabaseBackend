@@ -141,4 +141,15 @@ public class MovieDbContextTests
         Assert.Equal(1, firstRating);
     }
 
+    [Fact]
+    public void GetFirstBookmarkFromUser_UserNiko_GetBookmark()
+    {
+        var db = new MovieDbContext();
+        var firstBookmark = db.Users
+            .Include(x => x.Bookmarks)
+            .First(x => x.Username.Equals("Niko")).Bookmarks
+            .OrderBy(x => x.Id).First();
+        Assert.Equal("nm0000434", firstBookmark.Nconst.Trim());
+    }
+
 }
