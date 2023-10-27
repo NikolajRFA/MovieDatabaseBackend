@@ -1,4 +1,4 @@
-﻿namespace DataLayer.DataTransferObjects;
+﻿namespace WebServer.DataTransferObjects;
 
 public class BookmarkDto
 {

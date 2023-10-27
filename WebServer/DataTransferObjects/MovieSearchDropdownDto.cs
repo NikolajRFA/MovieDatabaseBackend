@@ -1,4 +1,6 @@
-﻿namespace DataLayer.DataTransferObjects;
+﻿using DataLayer.DataTransferObjects;
+
+namespace WebServer.DataTransferObjects;
 
 public class MovieSearchDropdownDto
 {
