@@ -6,12 +6,12 @@ public class Title
     public string TitleType { get; set; }
     public string OriginalTitle { get; set; }
     public bool IsAdult { get; set; }
-    public int StartYear { get; set; }
-    public int EndYear { get; set; }
-    public int RuntimeMinutes { get; set; }
-    public string Plot { get; set; }
+    public string? StartYear { get; set; }
+    public string? EndYear { get; set; }
+    public int? RuntimeMinutes { get; set; }
+    public string? Plot { get; set; }
     public double AverageRating { get; set; }
     public int NumVotes { get; set; }
-    public string Poster { get; set; }
+    public string? Poster { get; set; }
     public List<Genre> Genre { get; set; }
 }
