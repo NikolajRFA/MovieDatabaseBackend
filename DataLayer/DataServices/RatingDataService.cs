@@ -18,7 +18,7 @@ namespace DataLayer.DataServices
 
         }
 
-        public void DeleteRating(int )
+        public void DeleteRating(int id)
         {
 
         }
