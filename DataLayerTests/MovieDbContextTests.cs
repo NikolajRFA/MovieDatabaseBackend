@@ -129,4 +129,17 @@ public class MovieDbContextTests
             .SearchPhrase;
         Assert.Equal("star wars", firstSearchPhrase);
     }
+
+    [Fact]
+    public void GetFirstRatingFromUser_UserNiko_GetRating()
+    {
+        var db = new MovieDbContext();
+        var firstRating = db.Users
+            .Include(x => x.Ratings)
+            .First(x => x.Username.Equals("Niko")).Ratings
+            .OrderBy(x => x.Date).First().ThisRating;
+        Assert.Equal(1, firstRating);
+
+    }
+
 }
