@@ -8,4 +8,5 @@ public class User
     public string Password { get; set; }
     public List<Search> Searches { get; set; }
     public List<Rating> Ratings { get; set; }
+    public List<Bookmark> Bookmarks { get; set; }
 }

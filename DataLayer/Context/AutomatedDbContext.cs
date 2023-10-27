@@ -282,7 +282,7 @@ public partial class AutomatedDbContext : DbContext
                 .HasColumnName("date");
             entity.Property(e => e.Rating).HasColumnName("rating");
 
-            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Rateds)
+            entity.HasOne(d => d.IdNavigation).WithMany(p => p.Ratings)
                 .HasForeignKey(d => d.Id)
                 .HasConstraintName("rated_id_fkey");
 

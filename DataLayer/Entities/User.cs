@@ -15,7 +15,7 @@ public partial class User
 
     public virtual ICollection<Bookmark> Bookmarks { get; set; } = new List<Bookmark>();
 
-    public virtual ICollection<Rated> Rateds { get; set; } = new List<Rated>();
+    public virtual ICollection<Rated> Ratings { get; set; } = new List<Rated>();
 
     public virtual ICollection<Search> Searches { get; set; } = new List<Search>();
 }
