@@ -23,4 +23,13 @@ public class BookmarkDataService
         var db = new MovieDbContext();
         return db.Bookmarks.Where(x => x.UserId == userId).ToList();
     }
+
+    public void DeleteBookmark(int id)
+    {
+        var db = new MovieDbContext();
+        var bookmark = db.Bookmarks.FirstOrDefault(x => x.Id == id);
+        if(bookmark == null) return;
+        db.Bookmarks.Remove(bookmark);
+        db.SaveChanges();
+    }
 }
