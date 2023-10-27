@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<BookmarkDataService>();
 builder.Services.AddSingleton<UserDataService>();
 builder.Services.AddSingleton<RatingDataService>();
+builder.Services.AddSingleton<TitleDataService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
