@@ -24,6 +24,12 @@ public class BookmarkDataService
         return db.Bookmarks.Where(x => x.UserId == userId).ToList();
     }
 
+    public Bookmark? GetBookmark(int id)
+    {
+        var db = new MovieDbContext();
+        return db.Bookmarks.FirstOrDefault(x => x.Id == id);
+    }
+
     public void DeleteBookmark(int id)
     {
         var db = new MovieDbContext();

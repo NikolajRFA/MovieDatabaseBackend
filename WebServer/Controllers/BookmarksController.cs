@@ -17,47 +17,6 @@ public class BookmarksController : GenericControllerBase
         _dataService = dataService;
     }
 
-    [HttpGet("{Id}", Name = nameof(GetBookmarksWithUser))]
-    public IActionResult GetBookmarksWithUser(int id, int page = 0, int pageSize = 10)
-    {
-        var bookmarks = _dataService.GetBookmarks(id);
-        if (bookmarks.Count == 0)
-        {
-            return NotFound();
-        }
-
-        return Ok(Paging(bookmarks, bookmarks.Count, page, pageSize, nameof(GetBookmarksWithUser)));
-    }
-
-    [HttpPost("title")]
-    public IActionResult CreateTitleBookmarkWithUser(BookmarkModel bookmarkModel)
-    {
-        try
-        {
-            _dataService.CreateMovieBookmark(bookmarkModel.UserId, bookmarkModel.TitlePersonId);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            // Should be Forbid() but authentication isn't specified so it won't work
-            return StatusCode(403);
-        }
-    }
-    [HttpPost("person")]
-    public IActionResult CreatePersonBookmarkWithUser(BookmarkModel bookmarkModel)
-    {
-        try
-        {
-            _dataService.CreatePersonBookmark(bookmarkModel.UserId, bookmarkModel.TitlePersonId);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            // Should be Forbid() but authentication isn't specified so it won't work
-            return StatusCode(403);
-        }
-    }
-
     [HttpDelete("{Id}")]
     public IActionResult DeleteBookmarkWithUser(int id)
     {
