@@ -16,10 +16,12 @@ public class MovieDbContext : DbContext
     public DbSet<Profession> Professions { get; set; }
     public DbSet<HasProfession> HasProfession { get; set; }
     public DbSet<Wi> Wi { get; set; }
+    
 
     // Framework database
     public DbSet<User> Users { get; set; }
     public DbSet<Search> Searches { get; set; }
+    public DbSet<Rating> Rated { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -47,6 +49,11 @@ public class MovieDbContext : DbContext
             .HasMany(x => x.Searches)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.Id);
-        //modelBuilder.Entity<Searches>().Property(x => x.Id).HasColumnName("id");
+        modelBuilder.Entity<User>()
+            .HasMany(x=>x.Ratings)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.Id);
+        modelBuilder.Entity<Rating>().ToTable("rated").HasKey(x => new { x.Tconst, x.Id });
+        modelBuilder.Entity<Rating>().Property(x => x.ThisRating).HasColumnName("rating");
     }
 }
