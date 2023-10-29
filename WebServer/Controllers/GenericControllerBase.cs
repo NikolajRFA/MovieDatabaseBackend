@@ -7,12 +7,10 @@ namespace WebServer.Controllers;
 public class GenericControllerBase : ControllerBase
 {
     private readonly LinkGenerator _linkGenerator;
-    private readonly IMapper _mapper;
 
-    public GenericControllerBase(LinkGenerator linkGenerator, IMapper mapper)
+    public GenericControllerBase(LinkGenerator linkGenerator)
     {
         _linkGenerator = linkGenerator;
-        _mapper = mapper;
     }
 
     protected object Paging<T>(IEnumerable<T> items, int total, int page, int pageSize, string endpointName)
