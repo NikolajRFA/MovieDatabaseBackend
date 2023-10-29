@@ -26,7 +26,15 @@ public class UserDataService
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
-        var count = users.Count;
+        var count = db.Users.Count();
         return (users, count);
+    }
+
+    public User? CreateUser(string username, string email, string password)
+    {
+        var db = new MovieDbContext();
+        db.Database.ExecuteSqlRaw($"call create_user('{username}', '{email}', '{password}')");
+        var user = db.Users.SingleOrDefault(x => x.Username.Equals(username));
+        return user;
     }
 }

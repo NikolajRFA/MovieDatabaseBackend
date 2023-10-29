@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DataLayer.DataServices;
+using DataLayer.DbSets;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.DataTransferObjects;
+using WebServer.Models;
 
 namespace WebServer.Controllers;
 
@@ -26,11 +28,7 @@ public class UsersController : GenericControllerBase
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
 
-        var dto = _mapper.Map<UserDto>(user);
-        dto.Url = GetUrl(nameof(GetUser), new { user.Id });
-        dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
-        dto.Searches = "TODO";
-        dto.Ratings = GetUrl(nameof(RatingsController.GetRatings), new { userId = user.Id });
+        var dto = MapUser(user);
         return Ok(dto);
     }
 
@@ -42,14 +40,30 @@ public class UsersController : GenericControllerBase
         List<UserDto> dtos = new();
         foreach (var user in users)
         {
-            var dto = _mapper.Map<UserDto>(user);
-            dto.Url = GetUrl(nameof(GetUser), new { user.Id });
-            dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
-            dto.Searches = "TODO";
-            dto.Ratings = GetUrl(nameof(RatingsController.GetRatings), new { userId = user.Id });
+            var dto = MapUser(user);
             dtos.Add(dto);
         }
 
         return Ok(Paging(dtos, count, page, pageSize, nameof(GetUsers)));
+    }
+
+    [HttpPost]
+    public IActionResult CreateUser(CreateUserModel createUser)
+    {
+        var user = _dataService.CreateUser(createUser.Username, createUser.Email, createUser.Password);
+        if (user == null) return BadRequest();
+
+        var dto = MapUser(user);
+        return Ok(dto);
+    }
+
+    private UserDto MapUser(User user)
+    {
+        var dto = _mapper.Map<UserDto>(user);
+        dto.Url = GetUrl(nameof(GetUser), new { user.Id });
+        dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
+        dto.Searches = "TODO";
+        dto.Ratings = GetUrl(nameof(RatingsController.GetRatings), new { userId = user.Id });
+        return dto;
     }
 }

@@ -22,7 +22,6 @@ public class RatingsController : GenericControllerBase
 
 
     [HttpGet(Name = nameof(GetRatings))]
-
     public IActionResult GetRatings(int userId, int page = 0, int pageSize = 10)
     {
         var ratings = _dataService.GetRatings(userId);
@@ -31,17 +30,16 @@ public class RatingsController : GenericControllerBase
             return NotFound();
         }
 
-        List <RatingDto> ratingDtos = new();
+        List<RatingDto> ratingDtos = new();
         ratings.ForEach(rating =>
         {
             ratingDtos.Add(new RatingDto
             {
-                Url = GetUrl(nameof(GetRatings), new {userId, rating.Id}),
-                Tconst = rating.Tconst,
-                Id = rating.Id,
+                Url = GetUrl(nameof(GetRating), new { userId, tconst = rating.Tconst.Trim() }),
+                Tconst = rating.Tconst.Trim(),
+                User = GetUrl(nameof(UsersController.GetUser), new { rating.Id }),
                 Rating = rating.ThisRating,
                 Date = rating.Date
-
             });
         });
 
@@ -52,12 +50,16 @@ public class RatingsController : GenericControllerBase
     public IActionResult GetRating(string tconst, int userId)
     {
         var rating = _dataService.GetRating(tconst);
-        if (rating == null) { return NotFound(); }
+        if (rating == null)
+        {
+            return NotFound();
+        }
+
         var dto = new RatingDto
         {
             Url = GetUrl(nameof(GetRating), new { userId, rating.Id }),
-            Id = rating.Id,
-            Tconst = rating.Tconst,
+            User = GetUrl(nameof(UsersController.GetUser), new { rating.Id }),
+            Tconst = rating.Tconst.Trim(),
             Rating = rating.ThisRating,
             Date = rating.Date
         };
@@ -66,7 +68,6 @@ public class RatingsController : GenericControllerBase
 
 
     [HttpPost("{rating})")]
-
     public IActionResult CreateRating(RatingModel ratingModel)
     {
         try
@@ -80,7 +81,7 @@ public class RatingsController : GenericControllerBase
         }
     }
 
-   
+
     [HttpPut]
     public IActionResult UpdateRating(RatingModel ratingModel)
     {
@@ -94,7 +95,4 @@ public class RatingsController : GenericControllerBase
             return StatusCode(403);
         }
     }
-   
-   
 }
-   
