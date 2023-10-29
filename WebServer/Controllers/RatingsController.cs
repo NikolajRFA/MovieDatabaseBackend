@@ -8,12 +8,12 @@ namespace WebServer.Controllers;
 
 [Route("api/user/{userId:int}/ratings")]
 [ApiController]
-public class RatingController : GenericControllerBase
+public class RatingsController : GenericControllerBase
 {
     private readonly RatingDataService _dataService;
     private readonly IMapper _mapper;
 
-    public RatingController(RatingDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
+    public RatingsController(RatingDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
         linkGenerator)
     {
         _dataService = dataService;
