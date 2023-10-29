@@ -10,10 +10,12 @@ namespace WebServer.Controllers;
 public class RatingController : GenericControllerBase
 {
     private readonly RatingDataService _dataService;
+    private readonly IMapper _mapper;
 
     public RatingController(RatingDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator, mapper)
+        linkGenerator)
     {
         _dataService = dataService;
+        _mapper = mapper;
     }
 }

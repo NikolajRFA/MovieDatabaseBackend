@@ -10,11 +10,13 @@ namespace WebServer.Controllers;
 public class BookmarksController : GenericControllerBase
 {
     private readonly BookmarkDataService _dataService;
+    private readonly IMapper _mapper;
 
     public BookmarksController(BookmarkDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator, mapper)
+        linkGenerator)
     {
         _dataService = dataService;
+        _mapper = mapper;
     }
 
     [HttpDelete("{Id}")]
