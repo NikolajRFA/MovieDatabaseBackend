@@ -20,8 +20,7 @@ public class RatingController : GenericControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet]
-
+    [HttpGet(Name = nameof(GetRatingsFromUser))]
     public IActionResult GetRatingsFromUser(int userId)
     {
         var ratings = _dataService.GetRating(userId);

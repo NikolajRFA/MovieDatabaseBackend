@@ -25,12 +25,12 @@ public class UserController : GenericControllerBase
     {
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
-        
+
         var dto = _mapper.Map<UserDto>(user);
         dto.Url = GetUrl(nameof(GetUser), new { user.Id });
         dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
         dto.Searches = "TODO";
-        dto.Ratings = "TODO";
+        dto.Ratings = GetUrl(nameof(RatingController.GetRatingsFromUser), new { userId = user.Id });
         return Ok(dto);
     }
 
@@ -46,7 +46,7 @@ public class UserController : GenericControllerBase
             dto.Url = GetUrl(nameof(GetUser), new { user.Id });
             dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
             dto.Searches = "TODO";
-            dto.Ratings = "TODO";
+            dto.Ratings = GetUrl(nameof(RatingController.GetRatingsFromUser), new { userId = user.Id });
             dtos.Add(dto);
         }
 
