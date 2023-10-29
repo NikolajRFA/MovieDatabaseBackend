@@ -30,7 +30,7 @@ public class UserController : GenericControllerBase
         dto.Url = GetUrl(nameof(GetUser), new { user.Id });
         dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
         dto.Searches = "TODO";
-        dto.Ratings = GetUrl(nameof(RatingController.GetRatingsFromUser), new { userId = user.Id });
+        dto.Ratings = GetUrl(nameof(RatingController.GetRatings), new { userId = user.Id });
         return Ok(dto);
     }
 
@@ -46,7 +46,7 @@ public class UserController : GenericControllerBase
             dto.Url = GetUrl(nameof(GetUser), new { user.Id });
             dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
             dto.Searches = "TODO";
-            dto.Ratings = GetUrl(nameof(RatingController.GetRatingsFromUser), new { userId = user.Id });
+            dto.Ratings = GetUrl(nameof(RatingController.GetRatings), new { userId = user.Id });
             dtos.Add(dto);
         }
 
