@@ -28,7 +28,9 @@ namespace DataLayer.DataServices
 
         }
 
+
         public void DeleteRating(int userId, string tconst)
+
         {
 
         }
