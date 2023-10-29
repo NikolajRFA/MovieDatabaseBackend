@@ -5,14 +5,14 @@ using WebServer.DataTransferObjects;
 
 namespace WebServer.Controllers;
 
-[Route("api/user")]
+[Route("api/users")]
 [ApiController]
-public class UserController : GenericControllerBase
+public class UsersController : GenericControllerBase
 {
     private readonly UserDataService _dataService;
     private readonly IMapper _mapper;
 
-    public UserController(UserDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
+    public UsersController(UserDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
         linkGenerator)
     {
         _dataService = dataService;
