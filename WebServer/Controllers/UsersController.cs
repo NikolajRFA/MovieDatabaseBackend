@@ -12,13 +12,11 @@ namespace WebServer.Controllers;
 public class UsersController : GenericControllerBase
 {
     private readonly UserDataService _dataService;
-    private readonly IMapper _mapper;
 
     public UsersController(UserDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator)
+        linkGenerator, mapper)
     {
         _dataService = dataService;
-        _mapper = mapper;
     }
 
     // TODO: Add url references to searches and ratings.
@@ -59,7 +57,7 @@ public class UsersController : GenericControllerBase
 
     private UserDto MapUser(User user)
     {
-        var dto = _mapper.Map<UserDto>(user);
+        var dto = Mapper.Map<UserDto>(user);
         dto.Url = GetUrl(nameof(GetUser), new { user.Id });
         dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
         dto.Searches = "TODO";

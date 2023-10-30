@@ -15,13 +15,11 @@ namespace WebServer.Controllers;
 public class RatingsController : GenericControllerBase
 {
     private readonly RatingDataService _dataService;
-    private readonly IMapper _mapper;
 
     public RatingsController(RatingDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator)
+        linkGenerator, mapper)
     {
         _dataService = dataService;
-        _mapper = mapper;
     }
 
     [HttpDelete]
@@ -70,7 +68,7 @@ public class RatingsController : GenericControllerBase
             _dataService.CreateRating(ratingModel.id, ratingModel.tconst, ratingModel.rating);
             return Ok();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(403);
         }
@@ -85,7 +83,7 @@ public class RatingsController : GenericControllerBase
             _dataService.UpdateRating(ratingModel.id, ratingModel.tconst, ratingModel.rating);
             return Ok();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(403);
         }
@@ -93,7 +91,7 @@ public class RatingsController : GenericControllerBase
 
     private RatingDto MapRating(Rating rating, int userId)
     {
-        var ratingDto = _mapper.Map<RatingDto>(rating);
+        var ratingDto = Mapper.Map<RatingDto>(rating);
         ratingDto.Url = GetUrl(nameof(GetRating), new {userId, Tconst = rating.Tconst.Trim()});
         ratingDto.User = GetUrl(nameof(UsersController.GetUser), new { rating.Id });
         ratingDto.Tconst = GetUrl(nameof(TitlesController.GetTitle), new { Tconst = rating.Tconst.Trim() });
@@ -101,9 +99,6 @@ public class RatingsController : GenericControllerBase
         ratingDto.Date = rating.Date;
         return ratingDto;
     }
-    
-
-    
 }
 
 internal class RatingsPagingValues : PagingValues

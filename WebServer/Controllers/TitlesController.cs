@@ -12,13 +12,11 @@ namespace WebServer.Controllers;
 public class TitlesController : GenericControllerBase
 {
     private readonly TitleDataService _dataService;
-    private readonly IMapper _mapper;
 
     public TitlesController(TitleDataService titleDataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator)
+        linkGenerator, mapper)
     {
         _dataService = titleDataService;
-        _mapper = mapper;
     }
 
     [HttpGet(Name = nameof(GetTitles))]

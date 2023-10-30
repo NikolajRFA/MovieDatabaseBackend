@@ -6,10 +6,12 @@ namespace WebServer.Controllers;
 
 public class GenericControllerBase : ControllerBase
 {
+    protected IMapper Mapper { get; }
     private readonly LinkGenerator _linkGenerator;
 
-    public GenericControllerBase(LinkGenerator linkGenerator)
+    public GenericControllerBase(LinkGenerator linkGenerator, IMapper mapper)
     {
+        Mapper = mapper;
         _linkGenerator = linkGenerator;
     }
 

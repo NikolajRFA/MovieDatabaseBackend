@@ -11,13 +11,11 @@ namespace WebServer.Controllers;
 public class UserBookmarksController : GenericControllerBase
 {
     private readonly BookmarkDataService _dataService;
-    private readonly IMapper _mapper;
 
     public UserBookmarksController(BookmarkDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
-        linkGenerator)
+        linkGenerator, mapper)
     {
         _dataService = dataService;
-        _mapper = mapper;
     }
 
     [HttpGet(Name = nameof(GetBookmarks))]
