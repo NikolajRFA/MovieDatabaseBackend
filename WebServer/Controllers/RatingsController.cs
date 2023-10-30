@@ -10,7 +10,7 @@ using User = DataLayer.DbSets.User;
 
 namespace WebServer.Controllers;
 
-[Route("api/user/{userId:int}/ratings")]
+[Route("api/users/{userId:int}/ratings")]
 [ApiController]
 public class RatingsController : GenericControllerBase
 {
@@ -24,7 +24,7 @@ public class RatingsController : GenericControllerBase
         _mapper = mapper;
     }
 
-    [HttpDelete("{tconst}")]
+    [HttpDelete]
 
     public IActionResult DeleteRating(int userId, string tconst)
     {
@@ -33,22 +33,19 @@ public class RatingsController : GenericControllerBase
     }
 
     [HttpGet(Name = nameof(GetRatings))]
-    public IActionResult GetRatings(int userId, int page = 0, int pageSize = 10)
+    public IActionResult GetRatings(int userId, int page = 0, int pageSize = 3)
     {
-        var ratings = _dataService.GetRatings(userId);
-        if (ratings.Count == 0)
-        {
-            return NotFound();
-        }
-
+        var (ratings, count) = _dataService.GetRatings(userId, page, pageSize);
+        
         List<RatingDto> ratingDtos = new();
         foreach (var rating in ratings)
         {
             var dto = MapRating(rating, userId);
             ratingDtos.Add(dto);
+            GetUrl(nameof(GetRatings), new { userId });
         }
-      
-        return Ok(Paging(ratingDtos, ratings.Count, page, pageSize, nameof(GetRatings)));
+
+        return Ok(Paging(ratingDtos , count , new RatingsPagingValues{Page = page, PageSize = pageSize, UserId = userId} , nameof(GetRatings)));
     }
 
     [HttpGet("{tconst}", Name = nameof(GetRating))]
@@ -107,4 +104,9 @@ public class RatingsController : GenericControllerBase
     
 
     
+}
+
+internal class RatingsPagingValues : PagingValues
+{
+    public int UserId { get; set; }
 }

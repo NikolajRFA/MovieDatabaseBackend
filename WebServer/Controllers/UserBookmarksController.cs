@@ -41,7 +41,7 @@ public class UserBookmarksController : GenericControllerBase
             });
         });
 
-        return Ok(Paging(dtos, bookmarks.Count, page, pageSize, nameof(GetBookmarks)));
+        return Ok(Paging(dtos, bookmarks.Count, new PagingValues{Page = page, PageSize = pageSize}, nameof(GetBookmarks)));
     }
 
     [HttpGet("{id}", Name = nameof(GetBookmark))]

@@ -44,7 +44,7 @@ public class UsersController : GenericControllerBase
             dtos.Add(dto);
         }
 
-        return Ok(Paging(dtos, count, page, pageSize, nameof(GetUsers)));
+        return Ok(Paging(dtos, count, new PagingValues{Page = page, PageSize = pageSize}, nameof(GetUsers)));
     }
 
     [HttpPost]

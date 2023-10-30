@@ -13,18 +13,21 @@ public class GenericControllerBase : ControllerBase
         _linkGenerator = linkGenerator;
     }
 
-    protected object Paging<T>(IEnumerable<T> items, int total, int page, int pageSize, string endpointName)
+    protected object Paging<T>(IEnumerable<T> items, int total, PagingValues pagingValues, string endpointName)
     {
-
-        var numPages = (int)Math.Ceiling(total / (double)pageSize);
-        var next = page < numPages - 1
-            ? GetUrl(endpointName, new { page = page + 1, pageSize })
+        var nextPagingValues = (PagingValues) pagingValues.Clone();
+        nextPagingValues.Page += 1;
+        var prevPagingValues = (PagingValues) pagingValues.Clone();
+        prevPagingValues.Page -=  1;
+        var numPages = (int)Math.Ceiling(total / (double)pagingValues.PageSize);
+        var next = pagingValues.Page < numPages - 1
+            ? GetUrl(endpointName, nextPagingValues)
         : null;
-        var prev = page > 0
-            ? GetUrl(endpointName, new { page = page - 1, pageSize })
+        var prev = pagingValues.Page > 0
+            ? GetUrl(endpointName, prevPagingValues)
         : null;
 
-        var cur = GetUrl(endpointName, new { page, pageSize });
+        var cur = GetUrl(endpointName, pagingValues);
 
         return new
         {
@@ -40,6 +43,17 @@ public class GenericControllerBase : ControllerBase
     protected string GetUrl(string name, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, name, values) ?? "Not specified";
+    }
+}
+
+public class PagingValues : ICloneable
+{
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+
+    public object Clone()
+    {
+        return MemberwiseClone();
     }
 }
 

@@ -19,10 +19,16 @@ namespace DataLayer.DataServices
             db.SaveChanges();
         }
 
-        public List<Rating> GetRatings(int userId)
+        public (List<Rating> ratings, int count) GetRatings(int userId, int page, int pageSize)
         {
             var db = new MovieDbContext();
-            return db.Rated.Where(x => x.Id == userId).ToList();
+            var count = db.Rated.Count(x => x.Id== userId);
+            var ratings = db.Rated
+                .Where(x => x.Id == userId)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return (ratings, count);
         }
 
         public Rating? GetRating(string tconst)

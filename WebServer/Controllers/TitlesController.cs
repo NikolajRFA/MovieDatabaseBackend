@@ -44,7 +44,7 @@ public class TitlesController : GenericControllerBase
                 // Missing PersonalRatingDto, GenreDto, PersonDto
             });
         });
-        return Ok(Paging(dtos, titles.count, page, pageSize, nameof(GetTitles)));
+        return Ok(Paging(dtos, titles.count, new PagingValues{Page = page, PageSize = pageSize}, nameof(GetTitles)));
     }
 
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
