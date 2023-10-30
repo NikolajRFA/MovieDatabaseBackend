@@ -1,8 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography.X509Certificates;
+using AutoMapper;
 using DataLayer.DataServices;
+using DataLayer.DbSets;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.DataTransferObjects;
 using WebServer.Models;
+using User = DataLayer.DbSets.User;
 
 namespace WebServer.Controllers;
 
@@ -31,18 +35,12 @@ public class RatingsController : GenericControllerBase
         }
 
         List<RatingDto> ratingDtos = new();
-        ratings.ForEach(rating =>
+        foreach (var rating in ratings)
         {
-            ratingDtos.Add(new RatingDto
-            {
-                Url = GetUrl(nameof(GetRating), new { userId, tconst = rating.Tconst.Trim() }),
-                Tconst = rating.Tconst.Trim(),
-                User = GetUrl(nameof(UsersController.GetUser), new { rating.Id }),
-                Rating = rating.ThisRating,
-                Date = rating.Date
-            });
-        });
-
+            var dto = MapRating(rating, userId);
+            ratingDtos.Add(dto);
+        }
+      
         return Ok(Paging(ratingDtos, ratings.Count, page, pageSize, nameof(GetRatings)));
     }
 
@@ -55,14 +53,7 @@ public class RatingsController : GenericControllerBase
             return NotFound();
         }
 
-        var dto = new RatingDto
-        {
-            Url = GetUrl(nameof(GetRating), new { userId, rating.Id }),
-            User = GetUrl(nameof(UsersController.GetUser), new { rating.Id }),
-            Tconst = rating.Tconst.Trim(),
-            Rating = rating.ThisRating,
-            Date = rating.Date
-        };
+        var dto = MapRating(rating, userId);
         return Ok(dto);
     }
 
@@ -95,4 +86,18 @@ public class RatingsController : GenericControllerBase
             return StatusCode(403);
         }
     }
+
+    private RatingDto MapRating(Rating rating, int userId)
+    {
+        var ratingDto = _mapper.Map<RatingDto>(rating);
+        ratingDto.Url = GetUrl(nameof(GetRating), new {userId, Tconst = rating.Tconst.Trim()});
+        ratingDto.User = GetUrl(nameof(UsersController.GetUser), new { rating.Id });
+        ratingDto.Tconst = GetUrl(nameof(TitlesController.GetTitle), new { Tconst = rating.Tconst.Trim() });
+        ratingDto.Rating = rating.ThisRating;
+        ratingDto.Date = rating.Date;
+        return ratingDto;
+    }
+    
+
+    
 }

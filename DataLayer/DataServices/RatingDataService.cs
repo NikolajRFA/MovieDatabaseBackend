@@ -39,17 +39,6 @@ namespace DataLayer.DataServices
             db.Database.ExecuteSqlRaw($"call update_rating({userId}, '{tconst}', {updatedRating})");
             return db.SaveChanges() > 0;
 
-            /*var db = new MovieDbContext();
-
-            var rating = db.Rated.FirstOrDefault(x=>x.Tconst==tconst && x.Id == userId);
-            if (rating != null)
-            {
-                rating.ThisRating = updatedRating;
-               return db.SaveChanges() > 0;
-            }
-
-            return false;
-            */
         }
 
         /*
