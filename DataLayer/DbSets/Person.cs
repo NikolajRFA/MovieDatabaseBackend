@@ -3,9 +3,9 @@
 public class Person
 {
     public string Nconst { get; set; }
-    public string PersonName { get; set; }
-    public int BirthYear { get; set; }
-    public int DeathYear { get; set; }
+    public string Name { get; set; }
+    public string BirthYear { get; set; }
+    public string DeathYear { get; set; }
     public double NameRating { get; set; }
-    public List<Profession> Profession { get; set; }
+    public List<Profession> Professions { get; set; }
 }

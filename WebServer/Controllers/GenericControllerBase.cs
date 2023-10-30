@@ -17,17 +17,18 @@ public abstract class GenericControllerBase : ControllerBase
 
     protected object Paging<T>(IEnumerable<T> items, int total, PagingValues pagingValues, string endpointName)
     {
-        var nextPagingValues = (PagingValues) pagingValues.Clone();
+        var nextPagingValues = (PagingValues)pagingValues.Clone();
         nextPagingValues.Page += 1;
-        var prevPagingValues = (PagingValues) pagingValues.Clone();
-        prevPagingValues.Page -=  1;
+        var prevPagingValues = (PagingValues)pagingValues.Clone();
+        prevPagingValues.Page -= 1;
+        
         var numPages = (int)Math.Ceiling(total / (double)pagingValues.PageSize);
         var next = pagingValues.Page < numPages - 1
             ? GetUrl(endpointName, nextPagingValues)
-        : null;
+            : null;
         var prev = pagingValues.Page > 0
             ? GetUrl(endpointName, prevPagingValues)
-        : null;
+            : null;
 
         var cur = GetUrl(endpointName, pagingValues);
 
@@ -58,4 +59,3 @@ public class PagingValues : ICloneable
         return MemberwiseClone();
     }
 }
-

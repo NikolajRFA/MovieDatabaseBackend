@@ -2,8 +2,10 @@
 
 public class PersonDto
 {
+    public string Url { get; set; }
     public string Name { get; set; }
-    public int BirthYear { get; set; }
-    public int DeathYear { get; set; }
+    public string BirthYear { get; set; }
+    public string DeathYear { get; set; }
     public double NameRating { get; set; }
+    public List<ProfessionDto> Professions { get; set; }
 }

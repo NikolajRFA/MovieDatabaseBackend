@@ -23,7 +23,6 @@ public class RatingsController : GenericControllerBase
     }
 
     [HttpDelete]
-
     public IActionResult DeleteRating(int userId, string tconst)
     {
         _dataService.DeleteRating(userId, tconst);
@@ -34,7 +33,7 @@ public class RatingsController : GenericControllerBase
     public IActionResult GetRatings(int userId, int page = 0, int pageSize = 3)
     {
         var (ratings, count) = _dataService.GetRatings(userId, page, pageSize);
-        
+
         List<RatingDto> ratingDtos = new();
         foreach (var rating in ratings)
         {
@@ -43,7 +42,8 @@ public class RatingsController : GenericControllerBase
             GetUrl(nameof(GetRatings), new { userId });
         }
 
-        return Ok(Paging(ratingDtos , count , new RatingsPagingValues{Page = page, PageSize = pageSize, UserId = userId} , nameof(GetRatings)));
+        return Ok(Paging(ratingDtos, count,
+            new RatingsPagingValues { Page = page, PageSize = pageSize, UserId = userId }, nameof(GetRatings)));
     }
 
     [HttpGet("{tconst}", Name = nameof(GetRating))]
@@ -92,7 +92,7 @@ public class RatingsController : GenericControllerBase
     private RatingDto MapRating(Rating rating, int userId)
     {
         var ratingDto = Mapper.Map<RatingDto>(rating);
-        ratingDto.Url = GetUrl(nameof(GetRating), new {userId, Tconst = rating.Tconst.Trim()});
+        ratingDto.Url = GetUrl(nameof(GetRating), new { userId, Tconst = rating.Tconst.Trim() });
         ratingDto.User = GetUrl(nameof(UsersController.GetUser), new { rating.Id });
         ratingDto.Tconst = GetUrl(nameof(TitlesController.GetTitle), new { Tconst = rating.Tconst.Trim() });
         ratingDto.Rating = rating.ThisRating;

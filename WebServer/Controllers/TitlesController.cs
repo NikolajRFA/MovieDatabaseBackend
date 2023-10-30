@@ -8,7 +8,6 @@ namespace WebServer.Controllers;
 
 [Route("api/titles")]
 [ApiController]
-
 public class TitlesController : GenericControllerBase
 {
     private readonly TitleDataService _dataService;
@@ -28,7 +27,7 @@ public class TitlesController : GenericControllerBase
         {
             dtos.Add(new TitleDto
             {
-                Url = GetUrl(nameof(GetTitle), new{ tconst = title.Tconst.Trim()}),
+                Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() }),
                 Title = title.OriginalTitle,
                 TitleType = title.TitleType,
                 Poster = title.Poster,
@@ -42,7 +41,7 @@ public class TitlesController : GenericControllerBase
                 // Missing PersonalRatingDto, GenreDto, PersonDto
             });
         });
-        return Ok(Paging(dtos, titles.count, new PagingValues{Page = page, PageSize = pageSize}, nameof(GetTitles)));
+        return Ok(Paging(dtos, titles.count, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetTitles)));
     }
 
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
@@ -51,7 +50,7 @@ public class TitlesController : GenericControllerBase
         var title = _dataService.GetTitle(tconst);
         var titleDto = new TitleDto
         {
-            Url = GetUrl(nameof(GetTitle), new{ tconst = title.Tconst.Trim()}),
+            Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() }),
             Title = title.OriginalTitle,
             TitleType = title.TitleType,
             Poster = title.Poster,
