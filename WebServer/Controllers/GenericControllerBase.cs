@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace WebServer.Controllers;
 
-public class GenericControllerBase : ControllerBase
+public abstract class GenericControllerBase : ControllerBase
 {
     protected IMapper Mapper { get; }
     private readonly LinkGenerator _linkGenerator;
