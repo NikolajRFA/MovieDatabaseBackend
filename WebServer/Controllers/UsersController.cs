@@ -55,6 +55,18 @@ public class UsersController : GenericControllerBase
         return Ok(dto);
     }
 
+    [HttpDelete("{id:int}")] // Something (authentication) should be added here so a user only can delete their own account.
+    public IActionResult DeleteUser(int id)
+    {
+        if (_dataService.GetUser(id) == null) return NotFound();
+        if (_dataService.DeleteUser(id))
+        {
+            return Ok();
+        }
+
+        return StatusCode(500);
+    }
+
     private UserDto MapUser(User user)
     {
         var dto = Mapper.Map<UserDto>(user);

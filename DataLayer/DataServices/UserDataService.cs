@@ -37,4 +37,11 @@ public class UserDataService
         var user = db.Users.SingleOrDefault(x => x.Username.Equals(username));
         return user;
     }
+
+    public bool DeleteUser(int id)
+    {
+        var db = new MovieDbContext();
+        db.Database.ExecuteSqlRaw($"call delete_user({id})");
+        return !db.Users.Any(x => x.Id == id);
+    }
 }

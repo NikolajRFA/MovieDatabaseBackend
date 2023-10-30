@@ -6,7 +6,7 @@ using WebServer.Models;
 
 namespace WebServer.Controllers;
 
-[Route("api/user/{userId:int}/bookmarks")]
+[Route("api/users/{userId:int}/bookmarks")]
 [ApiController]
 public class UserBookmarksController : GenericControllerBase
 {
