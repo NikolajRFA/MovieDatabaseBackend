@@ -24,6 +24,13 @@ public class RatingsController : GenericControllerBase
         _mapper = mapper;
     }
 
+    [HttpDelete("{tconst}")]
+
+    public IActionResult DeleteRating(int userId, string tconst)
+    {
+        _dataService.DeleteRating(userId, tconst);
+        return Ok();
+    }
 
     [HttpGet(Name = nameof(GetRatings))]
     public IActionResult GetRatings(int userId, int page = 0, int pageSize = 10)

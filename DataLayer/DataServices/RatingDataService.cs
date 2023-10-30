@@ -41,13 +41,14 @@ namespace DataLayer.DataServices
 
         }
 
-        /*
-        public Rating DeleteRating(int userId, string tconst)
+        
+        public void  DeleteRating(int userId, string tconst)
 
         {
-
+            var db = new MovieDbContext();
+            db.Database.ExecuteSqlRaw($"call remove_rating({userId}, '{tconst}')");
+            db.SaveChanges();
         }
-        */
     }
 }
 
