@@ -45,7 +45,10 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Person>().ToTable("persons").HasKey(x => new { x.Nconst });
         modelBuilder.Entity<Person>().Property(x => x.NameRating).HasColumnName("name_rating");
         modelBuilder.Entity<Person>().Property(x => x.Name).HasColumnName("personname");
-        modelBuilder.Entity<Person>().HasMany(x => x.Professions).WithMany(x => x.Person).UsingEntity<HasProfession>();
+        modelBuilder.Entity<Person>()
+            .HasMany(x => x.Professions)
+            .WithMany(x => x.Person)
+            .UsingEntity<HasProfession>();
         
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
         
