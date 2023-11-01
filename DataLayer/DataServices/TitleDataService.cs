@@ -24,7 +24,9 @@ public class TitleDataService
     public Title GetTitle(string tconst)
     {
         var db = new MovieDbContext();
-        var title = db.Titles.FirstOrDefault(x => x.Tconst == tconst);
+        var title = db.Titles
+            .Include(x => x.Genre)
+            .FirstOrDefault(x => x.Tconst == tconst);
         return title;
     }
 
