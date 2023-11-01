@@ -49,6 +49,13 @@ public class MovieDbContext : DbContext
             .HasMany(x => x.Professions)
             .WithMany(x => x.Person)
             .UsingEntity<HasProfession>();
+
+        modelBuilder.Entity<HasGenre>().ToTable("has_genre")
+            .HasKey(x => new { x.Id, x.Tconst });
+        modelBuilder.Entity<Title>()
+            .HasMany(x => x.Genre)
+            .WithMany(x => x.Title)
+            .UsingEntity<HasGenre>();
         
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
         
