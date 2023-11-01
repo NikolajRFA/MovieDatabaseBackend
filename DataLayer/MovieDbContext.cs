@@ -49,12 +49,26 @@ public class MovieDbContext : DbContext
             .HasMany(x => x.Professions)
             .WithMany(x => x.Person)
             .UsingEntity<HasProfession>();
+
+        modelBuilder.Entity<Genre>().Property(x => x.GenreName).HasColumnName("genre");
+        
+        modelBuilder.Entity<HasGenre>().ToTable("has_genre")
+            .HasKey(x => new { x.Id, x.Tconst });
+        modelBuilder.Entity<HasGenre>().Property(x => x.Id).HasColumnName("id");
+        modelBuilder.Entity<Title>()
+            .HasMany(x => x.Genre)
+            .WithMany(x => x.Title)
+            .UsingEntity<HasGenre>()
+            .HasOne(x => x.Genre)
+            .WithMany()
+            .HasForeignKey(x => x.Id);
         
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
         
         modelBuilder.Entity<IsEpisodeOf>().ToTable("is_episode_of").HasKey(x => new { x.Tconst, x.ParentTconst });
         
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
+        
 
         // Framework database
         modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
