@@ -20,19 +20,6 @@ public class TitlesController : GenericControllerBase
         _dataService = titleDataService;
     }
 
-    [HttpGet(Name = nameof(GetTitles))]
-    public IActionResult GetTitles(int page = 0, int pageSize = 10)
-    {
-        var titles = _dataService.GetTitles(page, pageSize);
-        List<TitleDto> dtos = new();
-        titles.titles.ForEach(title =>
-        {
-            var dto = MapTitle(title);
-            dtos.Add(dto);
-        });
-        return Ok(Paging(dtos, titles.count, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetTitles)));
-    }
-
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
     public IActionResult GetTitle(string tconst)
     {
@@ -40,7 +27,24 @@ public class TitlesController : GenericControllerBase
         var titleDto = MapTitle(title);
         return Ok(titleDto);
     }
-    
+
+    [HttpGet(Name = nameof(GetTitles))]
+    public IActionResult GetTitles(int id = 1, string? q = null, int page = 0, int pageSize = 10)
+    {
+        var titles = q == null
+            ? _dataService.GetTitles(page, pageSize)
+            : _dataService.GetTitlesSearch(id, q, page, pageSize);
+
+        List<TitleDto> dtos = new();
+        titles.titles.ForEach(title =>
+        {
+            var dto = MapTitle(title);
+            dtos.Add(dto);
+        });
+        return Ok(Paging(dtos, titles.count, new TitleSearchPagingValues{Q = q, Page = page, PageSize = pageSize },
+            nameof(GetTitles)));
+    }
+
     private TitleDto MapTitle(Title title)
     {
         var dto = Mapper.Map<TitleDto>(title);
@@ -48,4 +52,9 @@ public class TitlesController : GenericControllerBase
         dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
         return dto;
     }
+}
+
+internal class TitleSearchPagingValues : PagingValues
+{
+    public string?  Q { get; set; }
 }
