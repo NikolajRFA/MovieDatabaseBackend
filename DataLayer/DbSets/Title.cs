@@ -15,4 +15,5 @@ public class Title
     public int NumVotes { get; set; }
     public string? Poster { get; set; }
     public List<Genre> Genre { get; set; }
+    public List<Crew> Crew { get; set; }
 }

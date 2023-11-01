@@ -8,4 +8,5 @@ public class Person
     public string DeathYear { get; set; }
     public double NameRating { get; set; }
     public List<Profession> Professions { get; set; }
+    public List<Crew> Crews { get; set; }
 }

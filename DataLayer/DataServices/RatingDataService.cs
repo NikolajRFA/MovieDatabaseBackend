@@ -12,7 +12,7 @@ namespace DataLayer.DataServices
 {
     public class RatingDataService
     {
-        public void CreateRating(int userId, string tconst, double rating)
+        public void CreateRating(int userId, string tconst, int rating)
         {
             var db = new MovieDbContext();
             db.Database.ExecuteSqlRaw($"call rate_title({userId},'{tconst}', {rating})");

@@ -62,6 +62,15 @@ public class MovieDbContext : DbContext
             .HasOne(x => x.Genre)
             .WithMany()
             .HasForeignKey(x => x.Id);
+
+        modelBuilder.Entity<Crew>()
+            .HasOne(x => x.Title)
+            .WithMany(x => x.Crew)
+            .HasForeignKey(x => x.Tconst);
+        modelBuilder.Entity<Crew>()
+            .HasOne(x => x.Person)
+            .WithMany(x => x.Crews)
+            .HasForeignKey(x => x.Nconst);
         
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
         
