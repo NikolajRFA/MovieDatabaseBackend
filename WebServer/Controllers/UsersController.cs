@@ -52,7 +52,7 @@ public class UsersController : GenericControllerBase
         if (user == null) return BadRequest();
 
         var dto = MapUser(user);
-        return Ok(dto);
+        return Created(dto.Url, dto);
     }
 
     [HttpDelete("{id:int}")] // Something (authentication) should be added here so a user only can delete their own account.
@@ -65,6 +65,16 @@ public class UsersController : GenericControllerBase
         }
 
         return StatusCode(500);
+    }
+
+    [HttpPut("{id:int}")]
+    public IActionResult UpdateUser(int id, UpdateUserModel model)
+    {
+        var user = _dataService.GetUser(id);
+        if (user == null) return NotFound();
+        var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, model.Password);
+        var dto = MapUser(updatedUser);
+        return Ok(dto);
     }
 
     private UserDto MapUser(User user)

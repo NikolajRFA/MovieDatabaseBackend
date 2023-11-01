@@ -1,4 +1,5 @@
 ﻿using DataLayer.DbSets;
+using EFCore.NamingConventions.Internal;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.DataServices;
@@ -43,5 +44,17 @@ public class UserDataService
         var db = new MovieDbContext();
         db.Database.ExecuteSqlRaw($"call delete_user({id})");
         return !db.Users.Any(x => x.Id == id);
+    }
+
+    public User UpdateUser(int id, string username, string email, string password)
+    {
+        var db = new MovieDbContext();
+        db.Database.ExecuteSqlRaw($"call update_user({id}, '{username}', '{email}', '{password}')");
+        var user = db.Users
+            .Include(x => x.Searches)
+            .Include(x => x.Bookmarks)
+            .Include(x => x.Ratings)
+            .SingleOrDefault(x => x.Id.Equals(id));
+        return user;
     }
 }
