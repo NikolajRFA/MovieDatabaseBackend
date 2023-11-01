@@ -16,4 +16,5 @@ public class Title
     public string? Poster { get; set; }
     public List<Genre> Genre { get; set; }
     public List<Crew> Crew { get; set; }
+    public List<Alias> Aliases { get; set; }
 }
