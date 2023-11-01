@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DataLayer.DataServices;
 using DataLayer.DataTransferObjects;
+using DataLayer.DbSets;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.DataTransferObjects;
 
@@ -25,21 +27,8 @@ public class TitlesController : GenericControllerBase
         List<TitleDto> dtos = new();
         titles.titles.ForEach(title =>
         {
-            dtos.Add(new TitleDto
-            {
-                Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() }),
-                Title = title.OriginalTitle,
-                TitleType = title.TitleType,
-                Poster = title.Poster,
-                StartYear = title.StartYear,
-                EndYear = title.EndYear,
-                IsAdult = title.IsAdult,
-                RunTimeMinutes = title.RuntimeMinutes,
-                AverageRating = title.AverageRating,
-                NumVotes = title.NumVotes,
-                Plot = title.Plot
-                // Missing PersonalRatingDto, GenreDto, PersonDto
-            });
+            var dto = MapTitle(title);
+            dtos.Add(dto);
         });
         return Ok(Paging(dtos, titles.count, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetTitles)));
     }
@@ -48,20 +37,14 @@ public class TitlesController : GenericControllerBase
     public IActionResult GetTitle(string tconst)
     {
         var title = _dataService.GetTitle(tconst);
-        var titleDto = new TitleDto
-        {
-            Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() }),
-            Title = title.OriginalTitle,
-            TitleType = title.TitleType,
-            Poster = title.Poster,
-            StartYear = title.StartYear,
-            EndYear = title.EndYear,
-            IsAdult = title.IsAdult,
-            RunTimeMinutes = title.RuntimeMinutes,
-            AverageRating = title.AverageRating,
-            NumVotes = title.NumVotes,
-            Plot = title.Plot
-        };
+        var titleDto = MapTitle(title);
         return Ok(titleDto);
+    }
+    
+    private TitleDto MapTitle(Title title)
+    {
+        var dto = Mapper.Map<TitleDto>(title);
+        dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
+        return dto;
     }
 }
