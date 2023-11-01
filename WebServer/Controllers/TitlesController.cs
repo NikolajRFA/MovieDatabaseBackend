@@ -41,8 +41,22 @@ public class TitlesController : GenericControllerBase
             var dto = MapTitle(title);
             dtos.Add(dto);
         });
-        return Ok(Paging(dtos, titles.count, new TitleSearchPagingValues{Q = q, Page = page, PageSize = pageSize },
+        return Ok(Paging(dtos, titles.count, new TitleSearchPagingValues { Q = q, Page = page, PageSize = pageSize },
             nameof(GetTitles)));
+    }
+
+    [HttpGet("dropdown")]
+    public IActionResult GetTitlesForDropdown(string q, int dropdownSize = 10)
+    {
+        var titles = _dataService.GetTitlesSearchForDropdown(q, dropdownSize);
+        List<MovieSearchDropdownDto> dtos = new();
+        titles.titles.ForEach(title =>
+        {
+            var dto = Mapper.Map<MovieSearchDropdownDto>(title);
+            dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
+            dtos.Add(dto);
+        });
+        return Ok(dtos);
     }
 
     private TitleDto MapTitle(Title title)
@@ -56,5 +70,5 @@ public class TitlesController : GenericControllerBase
 
 internal class TitleSearchPagingValues : PagingValues
 {
-    public string?  Q { get; set; }
+    public string? Q { get; set; }
 }

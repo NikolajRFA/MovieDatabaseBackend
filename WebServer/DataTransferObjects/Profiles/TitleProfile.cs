@@ -9,5 +9,7 @@ public class TitleProfile : Profile
     {
         CreateMap<Title, TitleDto>()
             .ForMember(dest => dest.Title, act => act.MapFrom(src => src.PrimaryTitle));
+        CreateMap<Title, MovieSearchDropdownDto>()
+            .ForMember(dest => dest.Title, act => act.MapFrom(src => src.PrimaryTitle));
     }
 }
