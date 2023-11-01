@@ -64,7 +64,8 @@ public class TitleDataService
         foreach (var bestMatch in filterResults)
         {
             titles.Add(db.Titles
-                    .Include(x => x.Genre)
+                    .Include(x => x.Crew.OrderBy(x=>x.Ordering).Take(2))
+                    .ThenInclude(x => x.Person)
                     .FirstOrDefault(x => 
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
