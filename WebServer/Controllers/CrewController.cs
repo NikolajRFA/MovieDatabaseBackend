@@ -1,10 +1,7 @@
-﻿using System.Resources;
-using AutoMapper;
-using AutoMapper.Execution;
+﻿using AutoMapper;
 using DataLayer.DataServices;
 using DataLayer.DbSets;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebServer.DataTransferObjects;
 
 namespace WebServer.Controllers;

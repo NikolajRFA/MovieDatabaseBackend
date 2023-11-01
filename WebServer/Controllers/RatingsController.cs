@@ -99,9 +99,9 @@ public class RatingsController : GenericControllerBase
         ratingDto.Date = rating.Date;
         return ratingDto;
     }
-}
-
-internal class RatingsPagingValues : PagingValues
-{
-    public int UserId { get; set; }
+    
+    private class RatingsPagingValues : PagingValues
+    {
+        public int UserId { get; set; }
+    }
 }

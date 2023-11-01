@@ -56,6 +56,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<HasGenre>().ToTable("has_genre")
             .HasKey(x => new { x.Id, x.Tconst });
         modelBuilder.Entity<HasGenre>().Property(x => x.Id).HasColumnName("id");
+        
         modelBuilder.Entity<Title>()
             .HasMany(x => x.Genre)
             .WithMany(x => x.Title)
@@ -63,6 +64,10 @@ public class MovieDbContext : DbContext
             .HasOne(x => x.Genre)
             .WithMany()
             .HasForeignKey(x => x.Id);
+        modelBuilder.Entity<Title>()
+            .HasMany(x => x.Aliases)
+            .WithOne(x => x.ThisTitle)
+            .HasForeignKey(x => x.Tconst);
 
         modelBuilder.Entity<Crew>()
             .HasOne(x => x.Title)
