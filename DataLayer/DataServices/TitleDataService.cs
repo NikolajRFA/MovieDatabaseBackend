@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.RegularExpressions;
 using DataLayer.DbSets;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,10 @@ public class TitleDataService
         foreach (var bestMatch in filterResults)
         {
             titles.Add(db.Titles
-                .Include(x => x.Genre)
-                .FirstOrDefault(x => 
-                    x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
-                );
+                    .Include(x => x.Genre)
+                    .FirstOrDefault(x =>
+                        x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
+            );
         }
 
         var count = results.Count();
@@ -64,14 +65,29 @@ public class TitleDataService
         foreach (var bestMatch in filterResults)
         {
             titles.Add(db.Titles
-                    .Include(x => x.Crew.OrderBy(x=>x.Ordering).Take(2))
+                    .Include(x => x.Crew.OrderBy(x => x.Ordering).Take(2))
                     .ThenInclude(x => x.Person)
-                    .FirstOrDefault(x => 
+                    .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
         }
 
         var count = results.Count();
         return (titles, count);
+    }
+
+    public (List<Alias>, int) GetTitleAliases(string tconst, int page, int pageSize)
+    {
+        var db = new MovieDbContext();
+        var aliases = db.Aliases
+            .Where(x => x.Tconst.Trim().Equals(tconst.Trim()))
+            .OrderBy(x => x.Ordering);
+
+        return (aliases
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
+                    .ToList(),
+                aliases.Count()
+            );
     }
 }
