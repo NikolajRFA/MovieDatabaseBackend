@@ -45,6 +45,7 @@ public class TitlesController : GenericControllerBase
     {
         var dto = Mapper.Map<TitleDto>(title);
         dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
+        dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
         return dto;
     }
 }

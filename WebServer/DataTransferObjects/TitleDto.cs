@@ -13,7 +13,7 @@ public class TitleDto
     public double AverageRating { get; set; }
     public int NumVotes { get; set; }
     public string? Plot { get; set; }
-    public PersonalRatingDto? PersonalRatingDto { get; set; }
-    public List<GenreDto> GenreDto { get; set; }
-    public List<PersonDto> PersonDto { get; set; }
+    public PersonalRatingDto? PersonalRatingDtos { get; set; }
+    public List<GenreDto> Genres { get; set; }
+    public List<PersonDto> PersonDtos { get; set; }
 }
