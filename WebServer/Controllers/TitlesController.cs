@@ -66,9 +66,9 @@ public class TitlesController : GenericControllerBase
         dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
         return dto;
     }
-}
-
-internal class TitleSearchPagingValues : PagingValues
-{
-    public string? Q { get; set; }
+    
+    private class TitleSearchPagingValues : PagingValues
+    {
+        public string? Q { get; set; }
+    }
 }
