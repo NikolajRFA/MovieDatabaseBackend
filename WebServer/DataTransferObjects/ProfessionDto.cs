@@ -2,6 +2,5 @@
 
 public class ProfessionDto
 {
-    public string Url { get; set; }
-    public string ProfessionName { get; set; }
+    public string Profession { get; set; }
 }

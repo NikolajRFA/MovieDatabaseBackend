@@ -7,6 +7,6 @@ public class ProfessionProfile : Profile
 {
     public ProfessionProfile()
     {
-        CreateMap<Profession, ProfessionDto>();
+        CreateMap<Profession, ProfessionDto>().ForMember(dest => dest.Profession, act => act.MapFrom(src => src.ProfessionName));
     }
 }
