@@ -18,6 +18,7 @@ builder.Services.AddSingleton<RatingDataService>();
 builder.Services.AddSingleton<TitleDataService>();
 builder.Services.AddSingleton<PersonDataService>();
 builder.Services.AddSingleton<CrewDataService>();
+builder.Services.AddSingleton<UserSearchDataService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

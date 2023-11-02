@@ -29,7 +29,7 @@ public class BookmarkDataService
         var db = new MovieDbContext();
         return db.Bookmarks.FirstOrDefault(x => x.Id == id);
     }
-
+        
     public void DeleteBookmark(int id)
     {
         var db = new MovieDbContext();
