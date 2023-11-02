@@ -44,6 +44,7 @@ public class TitleDataService
             titles.Add(db.Titles
                     .Include(x => x.Crew.OrderBy(x => x.Ordering).Take(2))
                     .ThenInclude(x => x.Person)
+                    .Include(x => x.Genre)
                     .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
@@ -64,6 +65,7 @@ public class TitleDataService
             titles.Add(db.Titles
                     .Include(x => x.Crew.OrderBy(x => x.Ordering).Take(2))
                     .ThenInclude(x => x.Person)
+                    .Include(x => x.Genre)
                     .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
