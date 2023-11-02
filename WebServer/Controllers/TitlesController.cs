@@ -46,17 +46,39 @@ public class TitlesController : GenericControllerBase
     }
 
     [HttpGet("dropdown")]
-    public IActionResult GetTitlesForDropdown(string q, int dropdownSize = 10)
+    public IActionResult GetTitlesForDropdown(string q, int dropdownSize = 5)
     {
+        // TODO PersonNameDto Urls are missing 
         var titles = _dataService.GetTitlesSearchForDropdown(q, dropdownSize);
         List<MovieSearchDropdownDto> dtos = new();
         titles.titles.ForEach(title =>
         {
             var dto = Mapper.Map<MovieSearchDropdownDto>(title);
             dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
+            dto.PersonDtos = Mapper.Map<List<PersonNameDto>>(title.Crew
+                .OrderBy(x => x.Ordering)
+                .Take(2)
+                .Select(x => x.Person)
+                .ToList()
+            );
             dtos.Add(dto);
         });
         return Ok(dtos);
+    }
+
+    [HttpGet("{tconst}/aliases", Name = nameof(GetTitleAliases))]
+    public IActionResult GetTitleAliases(string tconst, int page = 0, int pageSize = 10)
+    {
+        var (aliases, total) = _dataService.GetTitleAliases(tconst, page, pageSize);
+        List<AliasDto> dtos = new();
+        foreach (var alias in aliases)
+        {
+            var dto = Mapper.Map<AliasDto>(alias);
+            dto.TitleUrl = GetUrl(nameof(GetTitle), new { tconst = alias.Tconst.Trim() });
+            dtos.Add(dto);
+        }
+
+        return Ok(Paging(dtos, total, new AliasPagingValues { Tconst = tconst, Page = page, PageSize = pageSize }, nameof(GetTitleAliases)));
     }
 
     private TitleDto MapTitle(Title title)
@@ -66,9 +88,14 @@ public class TitlesController : GenericControllerBase
         dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
         return dto;
     }
-}
 
-internal class TitleSearchPagingValues : PagingValues
-{
-    public string? Q { get; set; }
+    private class TitleSearchPagingValues : PagingValues
+    {
+        public string? Q { get; set; }
+    }
+
+    private class AliasPagingValues : PagingValues
+    {
+        public string Tconst { get; set; }
+    }
 }

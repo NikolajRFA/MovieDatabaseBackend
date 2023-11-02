@@ -8,5 +8,6 @@ public class PersonProfile : Profile
     public PersonProfile()
     {
         CreateMap<Person, PersonDto>();
+        CreateMap<Person, PersonNameDto>();
     }
 }
