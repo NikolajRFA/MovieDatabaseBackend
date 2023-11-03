@@ -72,7 +72,8 @@ public class UsersController : GenericControllerBase
     {
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
-        var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, model.Password);
+        var (hashedPwd, salt) = _hashing.Hash(model.Password);
+        var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, hashedPwd, salt, model.Role);
         var dto = MapUser(updatedUser);
         return Ok(dto);
     }

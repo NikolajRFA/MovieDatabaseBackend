@@ -11,7 +11,7 @@ namespace WebServer.Controllers;
 
 [Route("api/titles")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class TitlesController : GenericControllerBase
 {
     private readonly TitleDataService _dataService;
@@ -21,8 +21,9 @@ public class TitlesController : GenericControllerBase
     {
         _dataService = titleDataService;
     }
-
+    
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetTitle(string tconst)
     {
         var title = _dataService.GetTitle(tconst);
