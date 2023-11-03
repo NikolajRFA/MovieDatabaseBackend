@@ -1,5 +1,9 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using DataLayer.DataServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using WebServiceToken.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,22 @@ builder.Services.AddSingleton<RatingDataService>();
 builder.Services.AddSingleton<TitleDataService>();
 builder.Services.AddSingleton<PersonDataService>();
 builder.Services.AddSingleton<CrewDataService>();
+builder.Services.AddSingleton<Hashing>();
+
+var secret = builder.Configuration.GetSection("Auth:Secret").Value;
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -34,6 +54,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

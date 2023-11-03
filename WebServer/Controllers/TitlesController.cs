@@ -2,6 +2,7 @@
 using DataLayer.DataServices;
 using DataLayer.DataTransferObjects;
 using DataLayer.DbSets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.DataTransferObjects;
@@ -10,6 +11,7 @@ namespace WebServer.Controllers;
 
 [Route("api/titles")]
 [ApiController]
+//[Authorize]
 public class TitlesController : GenericControllerBase
 {
     private readonly TitleDataService _dataService;
