@@ -34,12 +34,13 @@ public class UserBookmarksController : GenericControllerBase
             {
                 Url = GetUrl(nameof(GetBookmark), new { userId, bookmark.Id }),
                 UserId = bookmark.UserId,
-                Tconst = bookmark.Tconst,
-                Nconst = bookmark.Nconst
+                Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
+                Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
             });
         });
 
-        return Ok(Paging(dtos, bookmarks.Count, new PagingValues{Page = page, PageSize = pageSize}, nameof(GetBookmarks)));
+        return Ok(Paging(dtos, bookmarks.Count,
+            new UserBookmarksPagingValues { UserId = userId, Page = page, PageSize = pageSize }, nameof(GetBookmarks)));
     }
 
     [HttpGet("{id}", Name = nameof(GetBookmark))]
@@ -51,8 +52,8 @@ public class UserBookmarksController : GenericControllerBase
         {
             Url = GetUrl(nameof(GetBookmark), new { userId, bookmark.Id }),
             UserId = bookmark.UserId,
-            Tconst = bookmark.Tconst,
-            Nconst = bookmark.Nconst
+            Title = bookmark.Tconst,
+            Person = bookmark.Nconst
         };
         return Ok(dto);
     }
@@ -85,5 +86,10 @@ public class UserBookmarksController : GenericControllerBase
             // Should be Forbid() but authentication isn't specified so it won't work
             return StatusCode(403);
         }
+    }
+
+    private class UserBookmarksPagingValues : PagingValues
+    {
+        public int UserId { get; set; }
     }
 }
