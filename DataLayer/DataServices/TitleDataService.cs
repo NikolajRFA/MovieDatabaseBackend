@@ -34,12 +34,9 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitlesSearch(int id, string q, int page, int pageSize)
     {
         var db = new MovieDbContext();
-        var (results, count) = BestMatchSearch(db, q, 't', 2);
-        var filterResults = results.Skip(page * pageSize)
-            .Take(pageSize)
-            .ToList();
+        var (results, count) = BestMatchSearch(db, q, 't', page, pageSize,2);
         List<Title> titles = new();
-        foreach (var bestMatch in filterResults)
+        foreach (var bestMatch in results)
         {
             titles.Add(db.Titles
                     .Include(x => x.Crew.OrderBy(x => x.Ordering))
@@ -56,11 +53,9 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitlesSearchForDropdown(string q, int dropdownSize)
     {
         var db = new MovieDbContext();
-        var (results, count) = BestMatchSearch(db, q, 't');
-        var filterResults = results.Take(dropdownSize)
-            .ToList();
+        var (results, count) = BestMatchSearch(db, q, 't', 0, dropdownSize);
         List<Title> titles = new();
-        foreach (var bestMatch in filterResults)
+        foreach (var bestMatch in results)
         {
             titles.Add(db.Titles
                     .Include(x => x.Crew.OrderBy(x => x.Ordering).Take(2))
@@ -74,7 +69,7 @@ public class TitleDataService
         return (titles, count);
     }
 
-    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, char field, int? userId = null)
+    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, char field, int page, int pageSize, int? userId = null)
     {
         var qStrings = search.Split(" ");
         // Sanitize input
@@ -82,26 +77,11 @@ public class TitleDataService
         var variadic = string.Join("', '", qStrings);
         // Build the search function call.
         // If userId is null the overload of best_match_field that doesn't take a user id is used.
-        var bestMatchCall = $"best_match_field({(userId == null ? "" : $"{userId},")} '{field}', '{variadic}')";
-        var query = "WITH cte AS (SELECT * " +
-                    $" FROM {bestMatchCall}) " +
-                    " SELECT *, (SELECT COUNT(*) FROM cte) AS total_count " +
-                    " FROM cte";
-        //"OFFSET 0 LIMIT 10";
+        var bestMatchCall = $"best_match_field({(userId == null ? "" : $"{userId},")} {page}, {pageSize}, '{field}', '{variadic}')";
 
-        var bestMatchTotals = db.BestMatchTotals.FromSqlRaw(query).ToList();
-        List<BestMatch> bestMatches = new();
-        foreach (var bestMatchTotal in bestMatchTotals)
-        {
-            bestMatches.Add(new BestMatch
-            {
-                Tconst = bestMatchTotal.Tconst,
-                PrimaryTitle = bestMatchTotal.PrimaryTitle,
-                Count = bestMatchTotal.Count
-            });
-        }
-
-        return (bestMatches, bestMatchTotals.FirstOrDefault(new BestMatchTotal { Total = 0 }).Total);
+        var bestMatches = db.BestMatches.FromSqlRaw($"SELECT * FROM {bestMatchCall}").ToList();
+        
+        return (bestMatches, bestMatches.FirstOrDefault(new BestMatch { Total = 0 }).Total);
     }
 
     public (List<Alias>, int) GetTitleAliases(string tconst, int page, int pageSize)

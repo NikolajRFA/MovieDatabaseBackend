@@ -23,7 +23,6 @@ public class MovieDbContext : DbContext
     public DbSet<Rating> Rated { get; set; }
     public DbSet<Bookmark> Bookmarks { get; set; }
     public DbSet<BestMatch> BestMatches { get; set; }
-    public DbSet<BestMatchTotal> BestMatchTotals { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -86,10 +85,6 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
 
         modelBuilder.Entity<BestMatch>().HasNoKey();
-
-        modelBuilder.Entity<BestMatchTotal>()
-            .HasNoKey()
-            .Property(x => x.Total).HasColumnName("total_count");
         
         // Framework database
         modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
