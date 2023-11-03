@@ -42,14 +42,14 @@ public class TitleDataService
         foreach (var bestMatch in filterResults)
         {
             titles.Add(db.Titles
-                    .Include(x => x.Crew.OrderBy(x => x.Ordering).Take(2))
+                    .Include(x => x.Crew.OrderBy(x => x.Ordering))
                     .ThenInclude(x => x.Person)
                     .Include(x => x.Genre)
                     .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
         }
-        
+
         return (titles, count);
     }
 
@@ -70,7 +70,7 @@ public class TitleDataService
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
         }
-        
+
         return (titles, count);
     }
 
@@ -88,7 +88,7 @@ public class TitleDataService
                     " SELECT *, (SELECT COUNT(*) FROM cte) AS total_count " +
                     " FROM cte";
         //"OFFSET 0 LIMIT 10";
-        
+
         var bestMatchTotals = db.BestMatchTotals.FromSqlRaw(query).ToList();
         List<BestMatch> bestMatches = new();
         foreach (var bestMatchTotal in bestMatchTotals)
@@ -101,7 +101,7 @@ public class TitleDataService
             });
         }
 
-        return (bestMatches, bestMatchTotals.First().Total);
+        return (bestMatches, bestMatchTotals.FirstOrDefault(new BestMatchTotal { Total = 0 }).Total);
     }
 
     public (List<Alias>, int) GetTitleAliases(string tconst, int page, int pageSize)
