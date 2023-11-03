@@ -24,7 +24,7 @@ namespace WebServer.Controllers;
 
         }
 
-        [HttpGet("Searches" , Name = nameof(GetSearches))]
+        [HttpGet("searches" , Name = nameof(GetSearches))]
         public IActionResult GetSearches(int userId, int page = 0, int pageSize = 10)
         {
             var (searches, count) = _dataService.GetSearches(userId, page, pageSize);
@@ -39,7 +39,7 @@ namespace WebServer.Controllers;
         }
 
 
-        [HttpGet("Search",Name=nameof(GetSearch))]
+        [HttpGet("search",Name=nameof(GetSearch))]
         public ActionResult GetSearch(string searchPhrase)
 
         {
