@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 using DataLayer.DbSets;
@@ -76,6 +77,37 @@ public class TitleDataService
 
         var count = results.Count();
         return (titles, count);
+    }
+
+    public (List<BestMatch>, int) BestMatchSearch(string search, char field, int? userId = null)
+    {
+        var db = new MovieDbContext();
+        var qStrings = search.Split(" ");
+        // Sanitize input
+        qStrings = qStrings.Select(x => Regex.Replace(x, @"'", "''")).ToArray();
+        var variadic = string.Join("', '", qStrings);
+        // Build the search function call.
+        // If userId is null the overload of best_match_field that doesn't take a user id is used.
+        var bestMatchCall = $"best_match_field({(userId == null ? "" : userId)}, '{field}', '{variadic}')";
+        var query = "WITH cte AS (SELECT * " +
+                    $" FROM {bestMatchCall}) " +
+                    " SELECT *, (SELECT COUNT(*) FROM cte) AS total_count " +
+                    " FROM cte";
+        //"OFFSET 0 LIMIT 10";
+        
+        var bestMatchTotals = db.BestMatchTotals.FromSqlRaw(query).ToList();
+        List<BestMatch> bestMatches = new();
+        foreach (var bestMatchTotal in bestMatchTotals)
+        {
+            bestMatches.Add(new BestMatch
+            {
+                Tconst = bestMatchTotal.Tconst,
+                PrimaryTitle = bestMatchTotal.PrimaryTitle,
+                Count = bestMatchTotal.Count
+            });
+        }
+
+        return (bestMatches, bestMatchTotals.First().Total);
     }
 
     public (List<Alias>, int) GetTitleAliases(string tconst, int page, int pageSize)
