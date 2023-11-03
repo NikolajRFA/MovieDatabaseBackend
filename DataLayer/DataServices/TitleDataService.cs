@@ -39,9 +39,9 @@ public class TitleDataService
         foreach (var bestMatch in results)
         {
             titles.Add(db.Titles
-                    .Include(x => x.Crew.OrderBy(x => x.Ordering))
-                    .ThenInclude(x => x.Person)
-                    .Include(x => x.Genre)
+                    //.Include(x => x.Crew.OrderBy(x => x.Ordering))
+                    //.ThenInclude(x => x.Person)
+                    //.Include(x => x.Genre)
                     .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );

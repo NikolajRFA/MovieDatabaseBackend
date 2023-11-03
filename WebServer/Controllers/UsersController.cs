@@ -19,7 +19,6 @@ public class UsersController : GenericControllerBase
         _dataService = dataService;
     }
 
-    // TODO: Add url references to searches and ratings.
     [HttpGet("{id:int}", Name = nameof(GetUser))]
     public IActionResult GetUser(int id)
     {
@@ -82,7 +81,7 @@ public class UsersController : GenericControllerBase
         var dto = Mapper.Map<UserDto>(user);
         dto.Url = GetUrl(nameof(GetUser), new { user.Id });
         dto.Bookmarks = GetUrl(nameof(UserBookmarksController.GetBookmarks), new { userId = user.Id });
-        dto.Searches = "TODO";
+        dto.Searches = GetUrl(nameof(UserSearchController.GetSearches), new { userId = user.Id });
         dto.Ratings = GetUrl(nameof(RatingsController.GetRatings), new { userId = user.Id });
         return dto;
     }
