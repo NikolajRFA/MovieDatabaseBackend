@@ -8,7 +8,7 @@ using WebServer.DataTransferObjects;
 
 namespace WebServer.Controllers;
 
-[Route("api/users/{userId:int}/searches")]
+[Route("api/users/{userId:int}")]
 [ApiController]
 
 
@@ -22,10 +22,24 @@ namespace WebServer.Controllers;
         {
             _dataService = dataService;
 
-            
         }
 
-        [HttpGet(nameof(GetSearch))]
+        [HttpGet("Searches" , Name = nameof(GetSearches))]
+        public IActionResult GetSearches(int userId, int page = 0, int pageSize = 10)
+        {
+            var (searches, count) = _dataService.GetSearches(userId, page, pageSize);
+            List<SearchDto> searchDtos = new List<SearchDto>();
+            foreach (var search in searches)
+            {
+                var dto = MapSearch(search);
+                searchDtos.Add(dto);
+            } 
+        return Ok(Paging(searchDtos, count, new 
+                UserSearchPagingValues{ UserId = userId, Page = page, PageSize = pageSize }, nameof(GetSearches)));
+        }
+
+
+        [HttpGet("Search",Name=nameof(GetSearch))]
         public ActionResult GetSearch(string searchPhrase)
 
         {
@@ -36,10 +50,24 @@ namespace WebServer.Controllers;
                 User = GetUrl(nameof(UsersController.GetUser), new {search.Id }),
                 SearchPhrase = search.SearchPhrase,
                 Date = search.Date,
-
-
             };
             return Ok(dto);
         }
-    }
+
+        private SearchDto MapSearch(Search search)
+        {
+            var searchDto = Mapper.Map<SearchDto>(search);
+            searchDto.User = GetUrl(nameof(UsersController.GetUser), new { search.Id });
+            searchDto.SearchPhrase = search.SearchPhrase;
+            searchDto.Date = search.Date;
+            return searchDto;
+        }
+
+        private class UserSearchPagingValues : PagingValues
+        {
+            public int UserId { get; set; }
+        }
+}
+
+
 
