@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer.DbSets;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.DataServices
 {
@@ -25,6 +27,21 @@ namespace DataLayer.DataServices
                 .Take(pageSize)
                 .ToList();
             return (searches, count);
+        }
+
+        public void DeleteSearch(int userId, string search)
+        {
+            var db = new MovieDbContext();
+            db.Database.ExecuteSqlRaw($"call remove_search({userId}, '{search}')");
+            db.SaveChanges();
+
+        }
+
+        public void DeleteSearches(int userId)
+        {
+            var db = new MovieDbContext();
+            db.Database.ExecuteSqlRaw($"call remove_searches({userId})");
+            db.SaveChanges();
         }
     }
 }

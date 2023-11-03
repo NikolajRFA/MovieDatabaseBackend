@@ -8,7 +8,7 @@ using WebServer.DataTransferObjects;
 
 namespace WebServer.Controllers;
 
-[Route("api/users/{userId:int}")]
+[Route("api/users/{userId:int}/search")]
 [ApiController]
 
 
@@ -22,6 +22,21 @@ namespace WebServer.Controllers;
         {
             _dataService = dataService;
 
+        }
+
+        [HttpDelete]
+
+        public IActionResult DeleteSearch(int userId, string search)
+        {
+            _dataService.DeleteSearch(userId, search);
+            return Ok();
+        }
+
+        [HttpDelete("clear")]
+        public IActionResult DeleteSearches(int userId)
+        {
+            _dataService.DeleteSearches(userId);
+            return Ok();
         }
 
         [HttpGet("searches" , Name = nameof(GetSearches))]
@@ -39,7 +54,7 @@ namespace WebServer.Controllers;
         }
 
 
-        [HttpGet("search",Name=nameof(GetSearch))]
+        [HttpGet(Name=nameof(GetSearch))]
         public ActionResult GetSearch(string searchPhrase)
 
         {
