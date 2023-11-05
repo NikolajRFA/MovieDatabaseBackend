@@ -34,14 +34,14 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitlesSearch(int id, string q, int page, int pageSize)
     {
         var db = new MovieDbContext();
-        var (results, count) = BestMatchSearch(db, q, 't', page, pageSize,2);
+        var (results, count) = BestMatchSearch(db, q, page, pageSize,2);
         List<Title> titles = new();
         foreach (var bestMatch in results)
         {
             titles.Add(db.Titles
-                    //.Include(x => x.Crew.OrderBy(x => x.Ordering))
-                    //.ThenInclude(x => x.Person)
-                    //.Include(x => x.Genre)
+                    .Include(x => x.Crew.OrderBy(x => x.Ordering))
+                    .ThenInclude(x => x.Person)
+                    .Include(x => x.Genre)
                     .FirstOrDefault(x =>
                         x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
             );
@@ -53,7 +53,7 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitlesSearchForDropdown(string q, int dropdownSize)
     {
         var db = new MovieDbContext();
-        var (results, count) = BestMatchSearch(db, q, 't', 0, dropdownSize);
+        var (results, count) = BestMatchSearch(db, q, 0, dropdownSize);
         List<Title> titles = new();
         foreach (var bestMatch in results)
         {
@@ -69,7 +69,7 @@ public class TitleDataService
         return (titles, count);
     }
 
-    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, char field, int page, int pageSize, int? userId = null)
+    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, int page, int pageSize, int? userId = null)
     {
         var qStrings = search.Split(" ");
         // Sanitize input
@@ -77,7 +77,7 @@ public class TitleDataService
         var variadic = string.Join("', '", qStrings);
         // Build the search function call.
         // If userId is null the overload of best_match_field that doesn't take a user id is used.
-        var bestMatchCall = $"best_match_field({(userId == null ? "" : $"{userId},")} {page}, {pageSize}, '{field}', '{variadic}')";
+        var bestMatchCall = $"best_match({(userId == null ? "" : $"{userId},")} {page}, {pageSize}, '{variadic}')";
 
         var bestMatches = db.BestMatches.FromSqlRaw($"SELECT * FROM {bestMatchCall}").ToList();
         
