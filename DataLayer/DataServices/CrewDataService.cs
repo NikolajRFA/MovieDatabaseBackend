@@ -14,7 +14,7 @@ public class CrewDataService
     {
         var db = new MovieDbContext();
         var crew = db.Crew
-            .Where(x => x.Tconst.Trim().Equals(tconst.Trim()));
+            .Where(x => x.Tconst.Equals(tconst.Trim()));
         
         var crewTake = crew
             .OrderBy(x => x.Ordering)

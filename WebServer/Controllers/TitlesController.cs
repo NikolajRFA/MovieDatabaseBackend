@@ -90,8 +90,10 @@ public class TitlesController : GenericControllerBase
     private TitleDto MapTitle(Title title)
     {
         var dto = Mapper.Map<TitleDto>(title);
+        dto.Aliases = GetUrl(nameof(GetTitleAliases), new { tconst = title.Tconst.Trim() });
         dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
         dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
+        dto.Crew = GetUrl(nameof(CrewController.GetCrew), new { tconst = title.Tconst.Trim() });
         return dto;
     }
 

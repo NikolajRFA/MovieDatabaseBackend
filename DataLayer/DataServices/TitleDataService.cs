@@ -43,7 +43,7 @@ public class TitleDataService
                     .ThenInclude(x => x.Person)
                     .Include(x => x.Genre)
                     .FirstOrDefault(x =>
-                        x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
+                        x.Tconst.Equals(bestMatch.Tconst.Trim()))!
             );
         }
 
@@ -62,7 +62,7 @@ public class TitleDataService
                     .ThenInclude(x => x.Person)
                     .Include(x => x.Genre)
                     .FirstOrDefault(x =>
-                        x.Tconst.Trim().Equals(bestMatch.Tconst.Trim()))!
+                        x.Tconst.Equals(bestMatch.Tconst.Trim()))!
             );
         }
 
@@ -88,7 +88,7 @@ public class TitleDataService
     {
         var db = new MovieDbContext();
         var aliases = db.Aliases
-            .Where(x => x.Tconst.Trim().Equals(tconst.Trim()))
+            .Where(x => x.Tconst.Equals(tconst.Trim()))
             .OrderBy(x => x.Ordering);
 
         return (aliases

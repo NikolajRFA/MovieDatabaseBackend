@@ -4,6 +4,7 @@ public class TitleDto
 {
     public string Url { get; set; }
     public string Title { get; set; }
+    public string Aliases { get; set; }
     public string TitleType { get; set; }
     public string? Poster { get; set; }
     public string? StartYear { get; set; }
@@ -15,5 +16,5 @@ public class TitleDto
     public string? Plot { get; set; }
     public PersonalRatingDto? PersonalRatingDtos { get; set; }
     public List<GenreDto> Genres { get; set; }
-    public List<PersonDto> PersonDtos { get; set; }
+    public string Crew { get; set; }
 }
