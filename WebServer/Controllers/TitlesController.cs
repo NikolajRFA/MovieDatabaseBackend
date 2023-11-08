@@ -22,7 +22,6 @@ public class TitlesController : GenericControllerBase
     }
     
     [HttpGet("{tconst}", Name = nameof(GetTitle))]
-    [Authorize(Roles = "Admin")]
     public IActionResult GetTitle(string tconst)
     {
         var title = _dataService.GetTitle(tconst);

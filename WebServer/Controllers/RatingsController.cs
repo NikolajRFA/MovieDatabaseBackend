@@ -3,6 +3,8 @@ using AutoMapper;
 using DataLayer.DataServices;
 using DataLayer.DbSets;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.DataTransferObjects;
 using WebServer.Models;
@@ -22,10 +24,14 @@ public class RatingsController : GenericControllerBase
         _dataService = dataService;
     }
 
+    [Authorize]
     [HttpDelete]
     public IActionResult DeleteRating(int userId, string tconst)
     {
-        _dataService.DeleteRating(userId, tconst);
+        if (UserId != userId) return Unauthorized();
+        var rating = _dataService.GetRating(tconst, userId);
+        if (rating == null) return NotFound();
+        _dataService.DeleteRating(rating.User.Id, rating.Tconst);
         return Ok();
     }
 
@@ -49,7 +55,7 @@ public class RatingsController : GenericControllerBase
     [HttpGet("{tconst}", Name = nameof(GetRating))]
     public IActionResult GetRating(string tconst, int userId)
     {
-        var rating = _dataService.GetRating(tconst);
+        var rating = _dataService.GetRating(tconst, userId);
         if (rating == null)
         {
             return NotFound();
@@ -59,34 +65,37 @@ public class RatingsController : GenericControllerBase
         return Ok(dto);
     }
 
-
-    [HttpPost("{rating})")]
+    [Authorize]
+    [HttpPost]
     public IActionResult CreateRating(RatingModel ratingModel)
     {
         try
         {
-            _dataService.CreateRating(ratingModel.id, ratingModel.tconst, ratingModel.rating);
+            _dataService.CreateRating(UserId!.Value, ratingModel.Tconst, ratingModel.Rating);
             return Ok();
         }
         catch (Exception)
         {
-            return StatusCode(403);
+            return Forbid();
         }
     }
 
-
+    [Authorize]
     [HttpPut]
-    public IActionResult UpdateRating(RatingModel ratingModel)
+    public IActionResult UpdateRating(RatingModel ratingModel, [FromRoute] int userId)
     {
-        try
-        {
-            _dataService.UpdateRating(ratingModel.id, ratingModel.tconst, ratingModel.rating);
-            return Ok();
-        }
-        catch (Exception)
-        {
-            return StatusCode(403);
-        }
+        if (userId != UserId) return Unauthorized();
+        var rating = _dataService.GetRating(ratingModel.Tconst, userId);
+        if (rating == null) return NotFound();
+
+        _dataService.UpdateRating(UserId!.Value, ratingModel.Tconst, ratingModel.Rating);
+
+        rating = _dataService.GetRating(ratingModel.Tconst, userId);
+        
+        var dto = MapRating(rating!, UserId.Value);
+        GetUrl(nameof(GetRating), new { UserId });
+
+        return Ok(dto);
     }
 
     private RatingDto MapRating(Rating rating, int userId)
@@ -99,7 +108,7 @@ public class RatingsController : GenericControllerBase
         ratingDto.Date = rating.Date;
         return ratingDto;
     }
-    
+
     private class RatingsPagingValues : PagingValues
     {
         public int UserId { get; set; }
