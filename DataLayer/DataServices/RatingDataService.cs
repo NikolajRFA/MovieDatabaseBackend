@@ -22,7 +22,7 @@ namespace DataLayer.DataServices
         public (List<Rating> ratings, int count) GetRatings(int userId, int page, int pageSize)
         {
             var db = new MovieDbContext();
-            var count = db.Rated.Count(x => x.Id== userId);
+            var count = db.Rated.Count(x => x.Id == userId);
             var ratings = db.Rated
                 .Where(x => x.Id == userId)
                 .Skip(page * pageSize)
@@ -31,24 +31,22 @@ namespace DataLayer.DataServices
             return (ratings, count);
         }
 
-        public Rating? GetRating(string tconst)
+        public Rating? GetRating(string tconst, int userId)
         {
             var db = new MovieDbContext();
-            return db.Rated.FirstOrDefault(x => x.Tconst==tconst);
+            return db.Rated.FirstOrDefault(x => x.Tconst.Equals(tconst) && x.User.Id == userId);
         }
 
-        
+
         public bool UpdateRating(int userId, string tconst, int updatedRating)
         {
-
-            var db = new MovieDbContext();  
+            var db = new MovieDbContext();
             db.Database.ExecuteSqlRaw($"call update_rating({userId}, '{tconst}', {updatedRating})");
             return db.SaveChanges() > 0;
-
         }
 
-        
-        public void  DeleteRating(int userId, string tconst)
+
+        public void DeleteRating(int userId, string tconst)
 
         {
             var db = new MovieDbContext();
@@ -57,4 +55,3 @@ namespace DataLayer.DataServices
         }
     }
 }
-

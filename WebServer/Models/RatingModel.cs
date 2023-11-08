@@ -2,9 +2,8 @@
 {
     public class RatingModel
     {
-       public int id { get; set; }
-       public string tconst { get; set; }
-       public int rating { get; set; }
+       public string Tconst { get; set; }
+       public int Rating { get; set; }
     
     }
 }

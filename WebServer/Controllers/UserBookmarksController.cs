@@ -24,9 +24,7 @@ public class UserBookmarksController : GenericControllerBase
     [HttpGet(Name = nameof(GetBookmarks))]
     public IActionResult GetBookmarks(int page = 0, int pageSize = 10)
     {
-        var userId = ExtractUserIdFromClaim();
-        if (userId == null) return Forbid();
-        var bookmarks = _dataService.GetBookmarks(userId.Value);
+        var bookmarks = _dataService.GetBookmarks(UserId!.Value);
         if (bookmarks.Count == 0)
         {
             return NotFound();
@@ -37,41 +35,39 @@ public class UserBookmarksController : GenericControllerBase
         {
             dtos.Add(new BookmarkDto
             {
-                Url = GetUrl(nameof(GetBookmark), new { userId, bookmark.Id }),
-                User = GetUrl(nameof(UsersController.GetUser), new { id = userId }),
+                Url = GetUrl(nameof(GetBookmark), new { UserId, bookmark.Id }),
+                User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
                 Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
                 Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
             });
         });
 
         return Ok(Paging(dtos, bookmarks.Count,
-            new UserBookmarksPagingValues { UserId = userId.Value, Page = page, PageSize = pageSize }, nameof(GetBookmarks)));
+            new UserBookmarksPagingValues { UserId = UserId.Value, Page = page, PageSize = pageSize }, nameof(GetBookmarks)));
     }
 
     [HttpGet("{id}", Name = nameof(GetBookmark))]
-    public IActionResult GetBookmark(int id, int userId)
+    public IActionResult GetBookmark(int id)
     {
         var bookmark = _dataService.GetBookmark(id);
-        if (bookmark == null || bookmark.UserId != userId) return NotFound();
+        if (bookmark == null) return NotFound();
+        if (bookmark.UserId != UserId) return Unauthorized();
         var dto = new BookmarkDto
         {
-            Url = GetUrl(nameof(GetBookmark), new { userId, bookmark.Id }),
-            User = GetUrl(nameof(UsersController.GetUser), new { id = userId }),
+            Url = GetUrl(nameof(GetBookmark), new { UserId, bookmark.Id }),
+            User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
             Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
             Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
         };
         return Ok(dto);
     }
     
-    [HttpDelete("{id}", Name = nameof(DeleteBookmark))]
+    [HttpDelete("{id:int}", Name = nameof(DeleteBookmark))]
     public IActionResult DeleteBookmark(int id)
     {
-        var userId = ExtractUserIdFromClaim();
-        if (userId == null) return Forbid();
-        
         var bookmark = _dataService.GetBookmark(id);
         if (bookmark == null) return NotFound();
-        if (bookmark.UserId != userId) return Forbid();
+        if (bookmark.UserId != UserId) return Unauthorized();
         
         _dataService.DeleteBookmark(bookmark.Id);
         
@@ -83,13 +79,12 @@ public class UserBookmarksController : GenericControllerBase
     {
         try
         {
-            _dataService.CreateMovieBookmark(bookmarkModel.UserId, bookmarkModel.TitlePersonId);
+            _dataService.CreateMovieBookmark(UserId!.Value, bookmarkModel.TitlePersonId);
             return Ok();
         }
         catch (Exception e)
         {
-            // Should be Forbid() but authentication isn't specified so it won't work
-            return StatusCode(403);
+            return Forbid();
         }
     }
 
@@ -98,13 +93,12 @@ public class UserBookmarksController : GenericControllerBase
     {
         try
         {
-            _dataService.CreatePersonBookmark(bookmarkModel.UserId, bookmarkModel.TitlePersonId);
+            _dataService.CreatePersonBookmark(UserId!.Value, bookmarkModel.TitlePersonId);
             return Ok();
         }
         catch (Exception e)
         {
-            // Should be Forbid() but authentication isn't specified so it won't work
-            return StatusCode(403);
+            return Forbid();
         }
     }
 
