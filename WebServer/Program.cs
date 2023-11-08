@@ -1,5 +1,9 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using DataLayer.DataServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using WebServiceToken.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
