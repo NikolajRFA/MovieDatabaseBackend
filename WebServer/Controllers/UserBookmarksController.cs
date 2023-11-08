@@ -22,9 +22,11 @@ public class UserBookmarksController : GenericControllerBase
     }
 
     [HttpGet(Name = nameof(GetBookmarks))]
-    public IActionResult GetBookmarks(int userId, int page = 0, int pageSize = 10)
+    public IActionResult GetBookmarks(int page = 0, int pageSize = 10)
     {
-        var bookmarks = _dataService.GetBookmarks(userId);
+        var userId = ExtractUserIdFromClaim();
+        if (userId == null) return Forbid();
+        var bookmarks = _dataService.GetBookmarks(userId.Value);
         if (bookmarks.Count == 0)
         {
             return NotFound();
@@ -43,7 +45,7 @@ public class UserBookmarksController : GenericControllerBase
         });
 
         return Ok(Paging(dtos, bookmarks.Count,
-            new UserBookmarksPagingValues { UserId = userId, Page = page, PageSize = pageSize }, nameof(GetBookmarks)));
+            new UserBookmarksPagingValues { UserId = userId.Value, Page = page, PageSize = pageSize }, nameof(GetBookmarks)));
     }
 
     [HttpGet("{id}", Name = nameof(GetBookmark))]
@@ -60,16 +62,16 @@ public class UserBookmarksController : GenericControllerBase
         };
         return Ok(dto);
     }
-    [Authorize]
+    
     [HttpDelete("{id}", Name = nameof(DeleteBookmark))]
     public IActionResult DeleteBookmark(int id)
     {
         var userId = ExtractUserIdFromClaim();
-        if (userId == null) return StatusCode(401);
+        if (userId == null) return Forbid();
         
         var bookmark = _dataService.GetBookmark(id);
         if (bookmark == null) return NotFound();
-        if (bookmark.UserId != userId) return StatusCode(401);
+        if (bookmark.UserId != userId) return Forbid();
         
         _dataService.DeleteBookmark(bookmark.Id);
         
