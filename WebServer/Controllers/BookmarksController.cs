@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.DataServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -7,6 +8,7 @@ namespace WebServer.Controllers;
 
 [Route("api/bookmarks")]
 [ApiController]
+[Authorize]
 public class BookmarksController : GenericControllerBase
 {
     private readonly BookmarkDataService _dataService;

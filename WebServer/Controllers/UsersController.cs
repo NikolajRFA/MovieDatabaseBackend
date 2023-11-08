@@ -1,9 +1,14 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using AutoMapper;
 using DataLayer.DataServices;
 using DataLayer.DbSets;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebServer.DataTransferObjects;
 using WebServer.Models;
+using WebServiceToken.Services;
 
 namespace WebServer.Controllers;
 
@@ -12,11 +17,16 @@ namespace WebServer.Controllers;
 public class UsersController : GenericControllerBase
 {
     private readonly UserDataService _dataService;
+    private readonly Hashing _hashing;
+    private readonly IConfiguration _configuration;
 
-    public UsersController(UserDataService dataService, LinkGenerator linkGenerator, IMapper mapper) : base(
+    public UsersController(UserDataService dataService, LinkGenerator linkGenerator, IMapper mapper,
+        Hashing hashing, IConfiguration configuration) : base(
         linkGenerator, mapper)
     {
         _dataService = dataService;
+        _hashing = hashing;
+        _configuration = configuration;
     }
 
     [HttpGet("{id:int}", Name = nameof(GetUser))]
@@ -44,16 +54,6 @@ public class UsersController : GenericControllerBase
         return Ok(Paging(dtos, count, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetUsers)));
     }
 
-    [HttpPost]
-    public IActionResult CreateUser(CreateUserModel createUser)
-    {
-        var user = _dataService.CreateUser(createUser.Username, createUser.Email, createUser.Password);
-        if (user == null) return BadRequest();
-
-        var dto = MapUser(user);
-        return Created(dto.Url, dto);
-    }
-
     [HttpDelete("{id:int}")] // Something (authentication) should be added here so a user only can delete their own account.
     public IActionResult DeleteUser(int id)
     {
@@ -71,9 +71,71 @@ public class UsersController : GenericControllerBase
     {
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
-        var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, model.Password);
+        var (hashedPwd, salt) = _hashing.Hash(model.Password);
+        var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, hashedPwd, salt, model.Role);
         var dto = MapUser(updatedUser);
         return Ok(dto);
+    }
+
+    [HttpPost]
+    public IActionResult CreateUser(CreateUserModel model)
+    {
+        if (_dataService.GetUser(model.Username) != null)
+        {
+            return BadRequest();
+        }
+
+        if (string.IsNullOrEmpty(model.Password))
+        {
+            return BadRequest();
+        }
+
+        var (hashedPwd, salt) = _hashing.Hash(model.Password);
+
+        var user = _dataService.CreateUser(model.Username, model.Email, hashedPwd, salt, model.Role);
+
+        if (user == null) return BadRequest();
+
+        var dto = MapUser(user);
+        return Created(dto.Url, dto);
+    }
+
+    // Naming - Henrik notes that the naming of the POST below is violating the idea of naming as it's not a resource
+    [HttpPost("login")]
+    public IActionResult Login(UserLoginModel model)
+    {
+        var user = _dataService.GetUser(model.Username);
+        if (user == null)
+        {
+            return BadRequest();
+        }
+
+        if (!_hashing.Verify(model.Password, user.Password, user.Salt))
+        {
+            return BadRequest();
+        }
+        
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.Role, user.Role)
+        };
+
+        var secret = _configuration.GetSection("Auth:Secret").Value;
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.Now.AddSeconds(300),
+            signingCredentials: creds
+            );
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(new {user.Username, token = jwt});
     }
 
     private UserDto MapUser(User user)

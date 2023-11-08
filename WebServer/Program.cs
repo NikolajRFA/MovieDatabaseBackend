@@ -19,6 +19,22 @@ builder.Services.AddSingleton<TitleDataService>();
 builder.Services.AddSingleton<PersonDataService>();
 builder.Services.AddSingleton<CrewDataService>();
 builder.Services.AddSingleton<UserSearchDataService>();
+builder.Services.AddSingleton<Hashing>();
+
+var secret = builder.Configuration.GetSection("Auth:Secret").Value;
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

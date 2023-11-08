@@ -17,6 +17,17 @@ public class UserDataService
         return user;
     }
 
+    public User? GetUser(string name)
+    {
+        var db = new MovieDbContext();
+        var user = db.Users
+            .Include(x => x.Searches)
+            .Include(x => x.Bookmarks)
+            .Include(x => x.Ratings)
+            .SingleOrDefault(x => x.Username == name);
+        return user;
+    }
+
     public (List<User> users, int count) GetUsers(int page = 0, int pageSize = 10)
     {
         var db = new MovieDbContext();
@@ -31,10 +42,10 @@ public class UserDataService
         return (users, count);
     }
 
-    public User? CreateUser(string username, string email, string password)
+    public User? CreateUser(string username, string email, string password, string salt, string role = "User")
     {
         var db = new MovieDbContext();
-        db.Database.ExecuteSqlRaw($"call create_user('{username}', '{email}', '{password}')");
+        db.Database.ExecuteSqlRaw($"call create_user('{username}', '{email}', '{password}', '{salt}', '{role}')");
         var user = db.Users.SingleOrDefault(x => x.Username.Equals(username));
         return user;
     }
@@ -46,10 +57,10 @@ public class UserDataService
         return !db.Users.Any(x => x.Id == id);
     }
 
-    public User UpdateUser(int id, string username, string email, string password)
+    public User UpdateUser(int id, string username, string email, string hashedPassword, string salt, string role)
     {
         var db = new MovieDbContext();
-        db.Database.ExecuteSqlRaw($"call update_user({id}, '{username}', '{email}', '{password}')");
+        db.Database.ExecuteSqlRaw($"call update_user({id}, '{username}', '{email}', '{hashedPassword}', '{salt}', '{role}')");
         var user = db.Users
             .Include(x => x.Searches)
             .Include(x => x.Bookmarks)
