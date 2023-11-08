@@ -114,10 +114,11 @@ public class UsersController : GenericControllerBase
         {
             return BadRequest();
         }
-        
+
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Role, user.Role)
         };
 
@@ -129,13 +130,13 @@ public class UsersController : GenericControllerBase
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddSeconds(300),
+            expires: DateTime.Now.AddMinutes(120),
             signingCredentials: creds
-            );
+        );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-        return Ok(new {user.Username, token = jwt});
+        return Ok(new { user.Username, token = jwt });
     }
 
     private UserDto MapUser(User user)

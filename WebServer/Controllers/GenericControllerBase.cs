@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Security.Claims;
 using AutoMapper;
 
 namespace WebServer.Controllers;
@@ -46,6 +47,18 @@ public abstract class GenericControllerBase : ControllerBase
     protected string GetUrl(string name, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, name, values) ?? "Not specified";
+    }
+    
+    internal int? ExtractUserIdFromClaim()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null) return null;
+        if (!int.TryParse(userIdClaim, out int userId))
+        {
+            return null;
+        }
+
+        return userId;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using DataLayer.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,21 @@ public class UserBookmarksController : GenericControllerBase
             Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
         };
         return Ok(dto);
+    }
+    [Authorize]
+    [HttpDelete("{id}", Name = nameof(DeleteBookmark))]
+    public IActionResult DeleteBookmark(int id)
+    {
+        var userId = ExtractUserIdFromClaim();
+        if (userId == null) return StatusCode(401);
+        
+        var bookmark = _dataService.GetBookmark(id);
+        if (bookmark == null) return NotFound();
+        if (bookmark.UserId != userId) return StatusCode(401);
+        
+        _dataService.DeleteBookmark(bookmark.Id);
+        
+        return Ok();
     }
 
     [HttpPost("title")]
