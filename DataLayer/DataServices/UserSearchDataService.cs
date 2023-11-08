@@ -11,10 +11,11 @@ namespace DataLayer.DataServices
 {
     public class UserSearchDataService
     {
-        public Search? GetSearch(string search)
+        public Search? GetSearch(int userId, string search)
         {
             var db = new MovieDbContext();
-            return db.Searches.OrderByDescending(x=>x.Date).FirstOrDefault(x => x.SearchPhrase.Equals(search));
+            return db.Searches.OrderByDescending(x => x.Date)
+                .FirstOrDefault(x => x.SearchPhrase.Equals(search) && x.Id == userId);
         }
 
         public (List<Search> searches, int count) GetSearches(int userId, int page, int pageSize)
@@ -22,7 +23,7 @@ namespace DataLayer.DataServices
             var db = new MovieDbContext();
             var count = db.Searches.Count(x => x.Id == userId);
             var searches = db.Searches
-                .Where(x=>x.Id == userId)
+                .Where(x => x.Id == userId)
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -34,7 +35,6 @@ namespace DataLayer.DataServices
             var db = new MovieDbContext();
             db.Database.ExecuteSqlRaw($"call remove_search({userId}, '{search}')");
             db.SaveChanges();
-
         }
 
         public void DeleteSearches(int userId)

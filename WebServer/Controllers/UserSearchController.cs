@@ -54,10 +54,10 @@ namespace WebServer.Controllers;
 
 
         [HttpGet("{searchPhrase}", Name=nameof(GetSearch))]
-        public ActionResult GetSearch(string searchPhrase)
+        public ActionResult GetSearch(int userId, string searchPhrase)
 
         {
-            var search = _dataService.GetSearch(searchPhrase);
+            var search = _dataService.GetSearch(userId, searchPhrase);
             if (search == null) return NotFound();
             var dto = new SearchDto
             { 
