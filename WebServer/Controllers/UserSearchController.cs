@@ -59,18 +59,14 @@ namespace WebServer.Controllers;
         {
             var search = _dataService.GetSearch(userId, searchPhrase);
             if (search == null) return NotFound();
-            var dto = new SearchDto
-            { 
-                User = GetUrl(nameof(UsersController.GetUser), new {search.Id }),
-                SearchPhrase = search.SearchPhrase,
-                Date = search.Date,
-            };
+            var dto = MapSearch(search);
             return Ok(dto);
         }
 
         private SearchDto MapSearch(Search search)
         {
             var searchDto = Mapper.Map<SearchDto>(search);
+            searchDto.Url = GetUrl(nameof(GetSearch), new { userId = search.Id, search.SearchPhrase });
             searchDto.User = GetUrl(nameof(UsersController.GetUser), new { search.Id });
             searchDto.SearchPhrase = search.SearchPhrase;
             searchDto.Date = search.Date;
