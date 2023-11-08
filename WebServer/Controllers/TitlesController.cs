@@ -11,7 +11,6 @@ namespace WebServer.Controllers;
 
 [Route("api/titles")]
 [ApiController]
-[Authorize]
 public class TitlesController : GenericControllerBase
 {
     private readonly TitleDataService _dataService;

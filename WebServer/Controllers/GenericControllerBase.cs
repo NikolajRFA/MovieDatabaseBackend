@@ -9,6 +9,7 @@ public abstract class GenericControllerBase : ControllerBase
 {
     protected IMapper Mapper { get; }
     private readonly LinkGenerator _linkGenerator;
+    protected int? UserId => ExtractUserIdFromClaim();
 
     public GenericControllerBase(LinkGenerator linkGenerator, IMapper mapper)
     {
@@ -49,11 +50,11 @@ public abstract class GenericControllerBase : ControllerBase
         return _linkGenerator.GetUriByName(HttpContext, name, values) ?? "Not specified";
     }
     
-    internal int? ExtractUserIdFromClaim()
+    protected int? ExtractUserIdFromClaim()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null) return null;
-        if (!int.TryParse(userIdClaim, out int userId))
+        if (!int.TryParse(userIdClaim.Value, out int userId))
         {
             return null;
         }
