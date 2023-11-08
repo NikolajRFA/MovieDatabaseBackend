@@ -4,6 +4,7 @@ using System.Text;
 using AutoMapper;
 using DataLayer.DataServices;
 using DataLayer.DbSets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebServer.DataTransferObjects;
@@ -54,23 +55,31 @@ public class UsersController : GenericControllerBase
         return Ok(Paging(dtos, count, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetUsers)));
     }
 
+    [Authorize]
     [HttpDelete("{id:int}")] // Something (authentication) should be added here so a user only can delete their own account.
     public IActionResult DeleteUser(int id)
     {
         if (_dataService.GetUser(id) == null) return NotFound();
-        if (_dataService.DeleteUser(id))
+        if (User.IsInRole("Admin"))
         {
-            return Ok();
+            if (_dataService.DeleteUser(id)) return Ok("Deleted");
+        }
+        else
+        {
+            if (id != UserId) return Unauthorized();
+            if (_dataService.DeleteUser(id)) return Ok("Deleted");
         }
 
         return StatusCode(500);
     }
 
+    [Authorize]
     [HttpPut("{id:int}")]
     public IActionResult UpdateUser(int id, UpdateUserModel model)
     {
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
+        if (user.Id != UserId) return Unauthorized();
         var (hashedPwd, salt) = _hashing.Hash(model.Password);
         var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, hashedPwd, salt, model.Role);
         var dto = MapUser(updatedUser);
