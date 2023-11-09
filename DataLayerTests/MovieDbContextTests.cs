@@ -98,7 +98,7 @@ public class MovieDbContextTests
     {
         var db = new MovieDbContext();
         string[] searches = new[] { "star", "wars" };
-        db.Database.ExecuteSqlRaw($"select * from best_match(35, 0, 10, '${searches[0]}', '${searches[1]}')");
+        db.Database.ExecuteSqlRaw($"select * from best_match(35, 0, 10, '{searches[0]}', '{searches[1]}')");
         db.SaveChanges();
         var firstSearchPhrase = db.Users
             .Include(x => x.Searches)
