@@ -23,7 +23,7 @@ public class UserSearchController : GenericControllerBase
         _dataService = dataService;
     }
 
-    [HttpDelete("{searchPhrase}")]
+    [HttpDelete]
     public IActionResult DeleteSearch(int userId, string searchPhrase)
     {
         if (userId != UserId) return Unauthorized();
@@ -56,7 +56,7 @@ public class UserSearchController : GenericControllerBase
     }
 
 
-    [HttpGet("{searchPhrase}", Name = nameof(GetSearch))]
+    [HttpGet("single", Name = nameof(GetSearch))]
     public ActionResult GetSearch(int userId, string searchPhrase)
     {
         if (userId != UserId) return Unauthorized();
