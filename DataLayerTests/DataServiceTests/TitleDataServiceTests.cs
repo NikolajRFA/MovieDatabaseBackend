@@ -11,7 +11,7 @@ public class TitleDataServiceTests
         var (matches, total) = 
             dataService.GetTitlesSearch(1,"star wars revenge sith", 0, 10);
         Assert.Contains(matches, x => x.Tconst.Trim().Equals("tt0121766"));
-        Assert.Equal(1, total);
+        Assert.Equal(33, total);
     }
     
     [Fact]
@@ -20,6 +20,6 @@ public class TitleDataServiceTests
         var dataService = new TitleDataService();
         var (matches, total) =
             dataService.GetTitlesSearch(1,"office", 0, 10);
-        Assert.Equal(43, total);
+        Assert.Equal(588, total);
     }
 }

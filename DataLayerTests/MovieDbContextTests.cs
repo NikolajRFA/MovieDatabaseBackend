@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.ComTypes;
 using DataLayer;
+using DataLayer.DataServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayerTests;
@@ -64,10 +65,10 @@ public class MovieDbContextTests
     public void GetGenres_Top10Genres_Gets10Genres()
     {
         var db = new MovieDbContext();
-        var count = db.Genres.Include(x=>x.Title).Take(10).Count();
+        var count = db.Genres.Include(x => x.Title).Take(10).Count();
         Assert.Equal(10, count);
     }
-    
+
     [Fact]
     public void GetProfessions_Top10Professions_Gets10Professions()
     {
@@ -96,6 +97,9 @@ public class MovieDbContextTests
     public void GetFirstSearchFromUser_UserNiko_GetsStarWarsSearch()
     {
         var db = new MovieDbContext();
+        string[] searches = new[] { "star", "wars" };
+        db.Database.ExecuteSqlRaw($"select * from best_match(35, 0, 10, '${searches[0]}', '${searches[1]}')");
+        db.SaveChanges();
         var firstSearchPhrase = db.Users
             .Include(x => x.Searches)
             .First(x => x.Username.Equals("Niko"))
@@ -103,18 +107,21 @@ public class MovieDbContextTests
             .OrderBy(x => x.Date)
             .First()
             .SearchPhrase;
-        Assert.Equal("star wars", firstSearchPhrase);
+        Assert.Equal(string.Join(",", searches), firstSearchPhrase);
     }
 
     [Fact]
     public void GetFirstRatingFromUser_UserNiko_GetRating()
     {
         var db = new MovieDbContext();
+        const int rating = 10;
+        db.Database.ExecuteSqlRaw("DELETE FROM rated where id = 35 AND tconst = 'tt10850402'");
+        db.Database.ExecuteSqlRaw($"call rate_title(35, 'tt10850402', {rating})");
         var firstRating = db.Users
             .Include(x => x.Ratings)
             .First(x => x.Username.Equals("Niko")).Ratings
             .OrderBy(x => x.Date).First().ThisRating;
-        Assert.Equal(1, firstRating);
+        Assert.Equal(rating, firstRating);
     }
 
     [Fact]

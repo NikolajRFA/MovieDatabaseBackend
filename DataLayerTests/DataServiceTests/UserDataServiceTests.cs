@@ -28,7 +28,7 @@ public class UserDataServiceTests
     }
 
     [Fact]
-    public void GetUser_UserId2_GetsNikoUser()
+    public void GetUser_UserId35_GetsNikoUser()
     {
         var dataService = new UserDataService();
         var user = dataService.GetUser(35);
