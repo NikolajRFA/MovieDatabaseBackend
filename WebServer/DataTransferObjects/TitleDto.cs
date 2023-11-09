@@ -14,7 +14,6 @@ public class TitleDto
     public double AverageRating { get; set; }
     public int NumVotes { get; set; }
     public string? Plot { get; set; }
-    public PersonalRatingDto? PersonalRatingDtos { get; set; }
     public List<GenreDto> Genres { get; set; }
     public string Crew { get; set; }
 }
