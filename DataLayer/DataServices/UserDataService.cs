@@ -46,8 +46,7 @@ public class UserDataService
     {
         var db = new MovieDbContext();
         db.Database.ExecuteSqlRaw($"call create_user('{username}', '{email}', '{password}', '{salt}', '{role}')");
-        // What if two users have the same username?
-        var user = db.Users.SingleOrDefault(x => x.Username.Equals(username));
+        var user = db.Users.SingleOrDefault(x => x.Username.Equals(email));
         return user;
     }
 
