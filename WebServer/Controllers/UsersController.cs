@@ -56,7 +56,7 @@ public class UsersController : GenericControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{id:int}")] // Something (authentication) should be added here so a user only can delete their own account.
+    [HttpDelete("{id:int}")]
     public IActionResult DeleteUser(int id)
     {
         if (_dataService.GetUser(id) == null) return NotFound();
