@@ -13,9 +13,8 @@ public class MovieDbContext : DbContext
     public DbSet<IsEpisodeOf> IsEpisodeOf { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Profession> Professions { get; set; }
-    public DbSet<HasProfession> HasProfessions { get; set; }
     public DbSet<Wi> Wi { get; set; }
-
+    
 
     // Framework database
     public DbSet<User> Users { get; set; }

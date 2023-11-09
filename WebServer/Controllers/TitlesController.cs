@@ -74,7 +74,7 @@ public class TitlesController : GenericControllerBase
     [HttpGet("results", Name = nameof(GetTitlesForSearch))]
     public IActionResult GetTitlesForSearch(string q, int page = 0, int pageSize = 10)
     {
-        var titles = _dataService.GetTitlesSearchWithoutId(q, page, pageSize);
+        var titles = _dataService.GetTitlesSearch(UserId, q, page, pageSize);
         List<MovieSearchResultDto> dtos = new();
         titles.titles.ForEach(title =>
         {
