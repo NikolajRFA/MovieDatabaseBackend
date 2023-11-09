@@ -46,7 +46,7 @@ public class UserDataService
     {
         var db = new MovieDbContext();
         db.Database.ExecuteSqlRaw($"call create_user('{username}', '{email}', '{password}', '{salt}', '{role}')");
-        var user = db.Users.SingleOrDefault(x => x.Username.Equals(email));
+        var user = db.Users.SingleOrDefault(x => x.Email.Equals(email));
         return user;
     }
 
