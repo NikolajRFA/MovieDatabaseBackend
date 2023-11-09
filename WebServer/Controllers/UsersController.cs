@@ -148,6 +148,23 @@ public class UsersController : GenericControllerBase
         return Ok(new { user.Username, token = jwt });
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id:int}/role")]
+    public IActionResult UpdateUserRole( int id, [FromBody] string role)
+    {
+        try
+        {
+            var user = _dataService.GetUser(id);
+            if (user == null) return NotFound();
+            _dataService.UpdateUserRole(id, role);
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
     private UserDto MapUser(User user)
     {
         var dto = Mapper.Map<UserDto>(user);

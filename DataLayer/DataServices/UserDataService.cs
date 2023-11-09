@@ -68,4 +68,11 @@ public class UserDataService
             .SingleOrDefault(x => x.Id.Equals(id));
         return user;
     }
+
+    public void UpdateUserRole(int id, string role)
+    {
+        var db = new MovieDbContext();
+        db.Users.SingleOrDefault(x => x.Id == id)!.Role = role;
+        db.SaveChanges();
+    }
 }
