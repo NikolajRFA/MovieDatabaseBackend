@@ -71,6 +71,32 @@ public class TitlesController : GenericControllerBase
         });
         return Ok(dtos);
     }
+    [HttpGet("results", Name = nameof(GetTitlesForSearch))]
+    public IActionResult GetTitlesForSearch(string q, int page = 0, int pageSize = 10)
+    {
+        var titles = _dataService.GetTitlesSearchWithoutId(q, page, pageSize);
+        List<MovieSearchResultDto> dtos = new();
+        titles.titles.ForEach(title =>
+        {
+            var dto = Mapper.Map<MovieSearchResultDto>(title);
+            dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
+            dto.PersonDtos = new();
+            title.Crew
+                .OrderBy(x => x.Ordering)
+                .Take(2)
+                .Select(x => x.Person)
+                .ToList()
+                .ForEach(person =>
+                {
+                    var personDto = Mapper.Map<PersonNameDto>(person);
+                    personDto.Url = GetUrl(nameof(PersonsController.GetPerson), new { nconst = person.Nconst.Trim() });
+                    dto.PersonDtos.Add(personDto);
+                });
+            dtos.Add(dto);
+        });
+        return Ok(Paging(dtos, titles.count, new TitleSearchPagingValues { Q = q, Page = page, PageSize = pageSize },
+            nameof(GetTitlesForSearch)));
+    }
 
     [HttpGet("{tconst}/aliases", Name = nameof(GetTitleAliases))]
     public IActionResult GetTitleAliases(string tconst, int page = 0, int pageSize = 10)

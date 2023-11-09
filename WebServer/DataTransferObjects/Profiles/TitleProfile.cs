@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataLayer.DataTransferObjects;
 using DataLayer.DbSets;
 
 namespace WebServer.DataTransferObjects.Profiles;
@@ -10,6 +11,8 @@ public class TitleProfile : Profile
         CreateMap<Title, TitleDto>()
             .ForMember(dest => dest.Title, act => act.MapFrom(src => src.PrimaryTitle));
         CreateMap<Title, MovieSearchDropdownDto>()
+            .ForMember(dest => dest.Title, act => act.MapFrom(src => src.PrimaryTitle));
+        CreateMap<Title, MovieSearchResultDto>()
             .ForMember(dest => dest.Title, act => act.MapFrom(src => src.PrimaryTitle));
     }
 }

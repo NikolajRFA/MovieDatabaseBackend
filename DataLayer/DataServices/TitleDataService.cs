@@ -34,7 +34,7 @@ public class TitleDataService
     public (List<Title> titles, int count) GetTitlesSearch(int id, string q, int page, int pageSize)
     {
         var db = new MovieDbContext();
-        var (results, count) = BestMatchSearch(db, q, page, pageSize,2);
+        var (results, count) = BestMatchSearch(db, q, page, pageSize, id);
         List<Title> titles = new();
         foreach (var bestMatch in results)
         {
@@ -50,6 +50,25 @@ public class TitleDataService
         return (titles, count);
     }
 
+    public (List<Title> titles, int count) GetTitlesSearchWithoutId(string q, int page, int pageSize)
+    {
+        var db = new MovieDbContext();
+        var (results, count) = BestMatchSearch(db, q, page, pageSize);
+        List<Title> titles = new();
+        foreach (var bestMatch in results)
+        {
+            titles.Add(db.Titles
+                    .Include(x => x.Crew.OrderBy(x => x.Ordering))
+                    .ThenInclude(x => x.Person)
+                    .Include(x => x.Genre)
+                    .FirstOrDefault(x =>
+                        x.Tconst.Equals(bestMatch.Tconst.Trim()))!
+            );
+        }
+
+        return (titles, count);
+    }
+    
     public (List<Title> titles, int count) GetTitlesSearchForDropdown(string q, int dropdownSize)
     {
         var db = new MovieDbContext();
