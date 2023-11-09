@@ -29,6 +29,26 @@ public class TitlesController : GenericControllerBase
         return Ok(titleDto);
     }
 
+    [HttpGet("{tconst}/episodes", Name = nameof(GetEpisodesOfSeries))]
+    public IActionResult GetEpisodesOfSeries(string tconst, int page = 0, int pageSize = 10)
+    {
+        var (episodes, total) = _dataService.GetEpisodes(tconst, page, pageSize);
+        if (episodes == null) return NotFound();
+        List<EpisodeDto> episodeDtos = new();
+        foreach (var episode in episodes)
+        {
+            var dto = Mapper.Map<EpisodeDto>(episode);
+            dto.Title = episode.Title.PrimaryTitle;
+            dto.ParentUrl = GetUrl(nameof(GetTitle), new { tconst = episode.ParentTconst.Trim() });
+            dto.EpisodeUrl = GetUrl(nameof(GetTitle), new { tconst = episode.Tconst.Trim() });
+            episodeDtos.Add(dto);
+        }
+
+        return Ok(Paging(episodeDtos, total,
+            new TconstPagingValues { Tconst = tconst, Page = page, PageSize = pageSize }, nameof(GetEpisodesOfSeries)));
+    }
+    
+
     [HttpGet(Name = nameof(GetTitles))]
     public IActionResult GetTitles(int id = 1, string? q = null, int page = 0, int pageSize = 10)
     {
@@ -110,13 +130,16 @@ public class TitlesController : GenericControllerBase
             dtos.Add(dto);
         }
 
-        return Ok(Paging(dtos, total, new AliasPagingValues { Tconst = tconst, Page = page, PageSize = pageSize },
+        return Ok(Paging(dtos, total, new TconstPagingValues { Tconst = tconst, Page = page, PageSize = pageSize },
             nameof(GetTitleAliases)));
     }
 
     private TitleDto MapTitle(Title title)
     {
         var dto = Mapper.Map<TitleDto>(title);
+        dto.Episodes = title.TitleType.Equals("tvSeries")
+            ? GetUrl(nameof(GetEpisodesOfSeries), new { tconst = title.Tconst.Trim() })
+            : null;
         dto.Aliases = GetUrl(nameof(GetTitleAliases), new { tconst = title.Tconst.Trim() });
         dto.Url = GetUrl(nameof(GetTitle), new { tconst = title.Tconst.Trim() });
         dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
@@ -129,7 +152,7 @@ public class TitlesController : GenericControllerBase
         public string? Q { get; set; }
     }
 
-    private class AliasPagingValues : PagingValues
+    private class TconstPagingValues : PagingValues
     {
         public string Tconst { get; set; }
     }

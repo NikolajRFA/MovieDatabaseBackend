@@ -17,4 +17,5 @@ public class Title
     public List<Genre> Genre { get; set; }
     public List<Crew> Crew { get; set; }
     public List<Alias> Aliases { get; set; }
+    public List<IsEpisodeOf> IsEpisodeOfs { get; set; }
 }

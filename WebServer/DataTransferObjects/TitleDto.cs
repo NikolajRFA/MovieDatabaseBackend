@@ -6,6 +6,7 @@ public class TitleDto
     public string Title { get; set; }
     public string Aliases { get; set; }
     public string TitleType { get; set; }
+    public string? Episodes { get; set; }
     public string? Poster { get; set; }
     public string? StartYear { get; set; }
     public string? EndYear { get; set; }

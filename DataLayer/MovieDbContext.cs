@@ -80,6 +80,10 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
 
         modelBuilder.Entity<IsEpisodeOf>().ToTable("is_episode_of").HasKey(x => new { x.Tconst, x.ParentTconst });
+        modelBuilder.Entity<IsEpisodeOf>()
+            .HasOne(x => x.Title)
+            .WithMany(x => x.IsEpisodeOfs)
+            .HasForeignKey(x => x.ParentTconst);
 
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
 

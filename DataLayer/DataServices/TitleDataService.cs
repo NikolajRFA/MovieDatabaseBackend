@@ -31,6 +31,16 @@ public class TitleDataService
         return title;
     }
 
+    public (List<IsEpisodeOf>?, int) GetEpisodes(string tconst, int page = 0, int pageSize = 10)
+    {
+        var db = new MovieDbContext();
+        if (!db.Titles.First(x => x.Tconst.Equals(tconst.Trim())).TitleType.Equals("tvSeries")) return (null, 0);
+        var episodes = db.IsEpisodeOf
+            .Where(x => x.ParentTconst.Equals(tconst.Trim()));
+
+        return (episodes.Skip(page * pageSize).Take(pageSize).ToList(), episodes.Count());
+    }
+
     public (List<Title> titles, int count) GetTitlesSearch(int? id, string q, int page, int pageSize)
     {
         var db = new MovieDbContext();
@@ -49,7 +59,7 @@ public class TitleDataService
 
         return (titles, count);
     }
-    
+
     public (List<Title> titles, int count) GetTitlesSearchForDropdown(string q, int dropdownSize)
     {
         var db = new MovieDbContext();
@@ -69,7 +79,8 @@ public class TitleDataService
         return (titles, count);
     }
 
-    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, int page, int pageSize, int? userId = null)
+    private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, int page, int pageSize,
+        int? userId = null)
     {
         var qStrings = search.Split(" ");
         // Sanitize input
@@ -80,7 +91,7 @@ public class TitleDataService
         var bestMatchCall = $"best_match({(userId == null ? "" : $"{userId},")} {page}, {pageSize}, '{variadic}')";
 
         var bestMatches = db.BestMatches.FromSqlRaw($"SELECT * FROM {bestMatchCall}").ToList();
-        
+
         return (bestMatches, bestMatches.FirstOrDefault(new BestMatch { Total = 0 }).Total);
     }
 
