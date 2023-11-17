@@ -1,5 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=962be3e2_002D6738_002D4546_002Daf61_002D2b992125ac90/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetFirstBookmarkFromUser_UserNiko_GetBookmark" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=962be3e2_002D6738_002D4546_002Daf61_002D2b992125ac90/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetFirstBookmarkFromUser_UserNiko_GetBookmark" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\laust\CIT\RiderProjects\MovieDatabaseBackend\DataLayerTests" Presentation="&amp;lt;DataLayerTests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c4982e5f_002D361f_002D42d5_002Dbb47_002Ddc8504ae8bb4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetFirstBookmarkFromUser_UserNiko_GetBookmark #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -7,7 +7,7 @@
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.MovieDbContextTests.GetFirstBookmarkFromUser_UserNiko_GetBookmark&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d5178347_002D24b1_002D4a29_002D9b39_002Dde8e956453a0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ConnectToDb_NoActions_DoesNotFail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d5178347_002D24b1_002D4a29_002D9b39_002Dde8e956453a0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ConnectToDb_NoActions_DoesNotFail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.MovieDbContextTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.UserDataServiceTests.GetUsers_10UsersOnAPage_GetsFirst10Users&lt;/TestId&gt;&#xD;

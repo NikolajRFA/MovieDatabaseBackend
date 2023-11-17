@@ -83,6 +83,10 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<IsEpisodeOf>()
             .HasOne(x => x.Title)
             .WithMany(x => x.IsEpisodeOfs)
+            .HasForeignKey(x => x.Tconst);
+        modelBuilder.Entity<IsEpisodeOf>()
+            .HasOne(x => x.ParentTitle)
+            .WithMany()
             .HasForeignKey(x => x.ParentTconst);
 
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });

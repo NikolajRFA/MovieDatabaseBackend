@@ -34,8 +34,10 @@ public class TitleDataService
     public (List<IsEpisodeOf>?, int) GetEpisodes(string tconst, int page = 0, int pageSize = 10)
     {
         var db = new MovieDbContext();
+        // If title is not a 'tvSeries'
         if (!db.Titles.First(x => x.Tconst.Equals(tconst.Trim())).TitleType.Equals("tvSeries")) return (null, 0);
         var episodes = db.IsEpisodeOf
+            .Include(x => x.Title)
             .Where(x => x.ParentTconst.Equals(tconst.Trim()));
 
         return (episodes.Skip(page * pageSize).Take(pageSize).ToList(), episodes.Count());
