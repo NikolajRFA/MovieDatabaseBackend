@@ -46,7 +46,7 @@ public class CrewController : GenericControllerBase
     {
         var dto = Mapper.Map<CrewDto>(crew);
         dto.Url = GetUrl(nameof(GetCrewSingle), new { crew.Id });
-        dto.ActorName = crew.Person.Name;
+        dto.PersonName = crew.Person.Name;
         dto.Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = crew.Nconst.Trim() });
         dto.Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = crew.Tconst.Trim() });
         return dto;
