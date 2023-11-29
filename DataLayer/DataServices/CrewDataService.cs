@@ -14,6 +14,7 @@ public class CrewDataService
     {
         var db = new MovieDbContext();
         var crew = db.Crew
+            .Include(x => x.Person)
             .Where(x => x.Tconst.Equals(tconst.Trim()));
         
         var crewTake = crew
@@ -30,6 +31,7 @@ public class CrewDataService
     {
         var db = new MovieDbContext();
         var crew = db.Crew
+            .Include(x => x.Person)
             .SingleOrDefault(x => x.Id == id);
 
         return crew;
