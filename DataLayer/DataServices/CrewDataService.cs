@@ -19,6 +19,7 @@ public class CrewDataService
         
         var crewTake = crew
             .OrderBy(x => x.Ordering)
+            .ThenBy(x => x.Id)
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
