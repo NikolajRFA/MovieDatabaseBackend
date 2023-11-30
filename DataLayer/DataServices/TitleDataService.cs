@@ -38,7 +38,9 @@ public class TitleDataService
         if (!db.Titles.First(x => x.Tconst.Equals(tconst.Trim())).TitleType.Equals("tvSeries")) return (null, 0);
         var episodes = db.IsEpisodeOf
             .Include(x => x.Title)
-            .Where(x => x.ParentTconst.Equals(tconst.Trim()));
+            .Where(x => x.ParentTconst.Equals(tconst.Trim()))
+            .OrderBy(x => x.SeasonNumber)
+            .ThenBy(x => x.EpisodeNumber);
 
         return (episodes.Skip(page * pageSize).Take(pageSize).ToList(), episodes.Count());
     }
