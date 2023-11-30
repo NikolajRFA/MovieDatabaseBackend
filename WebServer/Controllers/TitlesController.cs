@@ -30,9 +30,9 @@ public class TitlesController : GenericControllerBase
     }
 
     [HttpGet("{tconst}/episodes", Name = nameof(GetEpisodesOfSeries))]
-    public IActionResult GetEpisodesOfSeries(string tconst, int page = 0, int pageSize = 10)
+    public IActionResult GetEpisodesOfSeries(string tconst, int page = 0, int pageSize = 10, int season = 0)
     {
-        var (episodes, total) = _dataService.GetEpisodes(tconst, page, pageSize);
+        var (episodes, total) = _dataService.GetEpisodes(tconst, page, pageSize, season);
         if (episodes == null) return NotFound();
         List<EpisodeDto> episodeDtos = new();
         foreach (var episode in episodes)
