@@ -24,4 +24,20 @@ public class PersonDataService
         var total = db.Persons.Count();
         return (persons, total);
     }
+
+    public (List<Title>, int) GetTitlesFromPerson(string nconst, int page = 0, int pageSize = 10)
+    {
+        var db = new MovieDbContext();
+        var titles = db.Titles
+            .Include(x => x.Crew)
+            .Where(x => x.Crew.Any(y => y.Nconst.Equals(nconst.Trim())));
+
+        var pagedTitles = titles
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var total = titles.Count();
+        return (pagedTitles, total);
+    }
 }
