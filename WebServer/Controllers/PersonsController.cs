@@ -47,15 +47,7 @@ public class PersonsController : GenericControllerBase
         List<TitleDto> dtos = new();
         foreach (var title in titles)
         {
-            var dto = Mapper.Map<TitleDto>(title);
-            dto.Episodes = title.TitleType.Equals("tvSeries")
-                ? GetUrl(nameof(TitlesController.GetEpisodesOfSeries), new { tconst = title.Tconst.Trim() })
-                : null;
-            dto.Aliases = GetUrl(nameof(TitlesController.GetTitleAliases), new { tconst = title.Tconst.Trim() });
-            dto.Url = GetUrl(nameof(TitlesController.GetTitle), new { tconst = title.Tconst.Trim() });
-            dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
-            dto.Crew = GetUrl(nameof(CrewController.GetCrew), new { tconst = title.Tconst.Trim() });
-            dtos.Add(dto);
+            dtos.Add(MapTitle(title));
         }
 
         return Ok(Paging(dtos, total, new NconstPagingValues {Nconst = nconst, Page = page, PageSize = pageSize },

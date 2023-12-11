@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Security.Claims;
 using AutoMapper;
+using DataLayer.DbSets;
+using WebServer.DataTransferObjects;
 
 namespace WebServer.Controllers;
 
@@ -60,6 +62,19 @@ public abstract class GenericControllerBase : ControllerBase
         }
 
         return userId;
+    }
+    
+    protected TitleDto MapTitle(Title title)
+    {
+        var dto = Mapper.Map<TitleDto>(title);
+        dto.Episodes = title.TitleType.Equals("tvSeries")
+            ? GetUrl(nameof(TitlesController.GetEpisodesOfSeries), new { tconst = title.Tconst.Trim() })
+            : null;
+        dto.Aliases = GetUrl(nameof(TitlesController.GetTitleAliases), new { tconst = title.Tconst.Trim() });
+        dto.Url = GetUrl(nameof(TitlesController.GetTitle), new { tconst = title.Tconst.Trim() });
+        dto.Genres = Mapper.Map<List<GenreDto>>(title.Genre);
+        dto.Crew = GetUrl(nameof(CrewController.GetCrew), new { tconst = title.Tconst.Trim() });
+        return dto;
     }
 }
 
