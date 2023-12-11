@@ -8,4 +8,5 @@ public class PersonDto
     public string DeathYear { get; set; }
     public double NameRating { get; set; }
     public List<ProfessionDto> Professions { get; set; }
+    public string TitlesUrl { get; set; }
 }
