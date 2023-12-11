@@ -59,6 +59,7 @@ public class PersonsController : GenericControllerBase
         var dto = Mapper.Map<PersonDto>(person);
         dto.Url = GetUrl(nameof(GetPerson), new { nconst = person.Nconst.Trim() });
         dto.Professions = Mapper.Map<List<ProfessionDto>>(person.Professions);
+        dto.TitlesUrl = GetUrl(nameof(GetTitlesFromPerson), new { nconst = person.Nconst.Trim() });
         return dto;
     }
     

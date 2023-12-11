@@ -30,7 +30,8 @@ public class PersonDataService
         var db = new MovieDbContext();
         var titles = db.Titles
             .Include(x => x.Crew)
-            .Where(x => x.Crew.Any(y => y.Nconst.Equals(nconst.Trim())));
+            .Where(x => x.Crew.Any(y => y.Nconst.Equals(nconst.Trim())))
+            .OrderByDescending(x => x.NumVotes);
 
         var pagedTitles = titles
             .Skip(page * pageSize)
