@@ -30,6 +30,7 @@ public class PersonDataService
         var db = new MovieDbContext();
         var titles = db.Titles
             .Include(x => x.Crew)
+            .Include(x => x.Genre)
             .Where(x => x.Crew.Any(y => y.Nconst.Equals(nconst.Trim())))
             .OrderByDescending(x => x.NumVotes);
 
