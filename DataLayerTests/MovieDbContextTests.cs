@@ -2,11 +2,19 @@ using System.Runtime.InteropServices.ComTypes;
 using DataLayer;
 using DataLayer.DataServices;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Abstractions;
 
 namespace DataLayerTests;
 
 public class MovieDbContextTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public MovieDbContextTests(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
     [Fact]
     public void ConnectToDb_NoActions_DoesNotFail()
     {
@@ -133,5 +141,40 @@ public class MovieDbContextTests
             .First(x => x.Username.Equals("Niko")).Bookmarks
             .OrderBy(x => x.Id).First();
         Assert.Equal("nm0000434", firstBookmark.Nconst.Trim());
+    }
+
+    [Fact]
+    public void GetBookmark_WithTitle_Success()
+    {
+        var db = new MovieDbContext();
+        var bookmarkWithTitle = db.Bookmarks
+            .Include(x => x.Title)
+            .First(x => x.Id == 58);
+        _testOutputHelper.WriteLine($"Title: {bookmarkWithTitle.Title.PrimaryTitle}");
+        Assert.Equal("Twin Peaks", bookmarkWithTitle.Title.PrimaryTitle);
+    }
+    
+    [Fact]
+    public void GetBookmark_WithPerson_Success()
+    {
+        var db = new MovieDbContext();
+        var bookmarkWithPerson = db.Bookmarks
+            .Include(x => x.Person)
+            .First(x => x.Id == 57);
+        _testOutputHelper.WriteLine($"Person: {bookmarkWithPerson.Person.Name}");
+        Assert.Equal("Mark Hamill", bookmarkWithPerson.Person.Name);
+    }
+
+    [Fact]
+    public void GetBookmark_WithPersonAndTitle_Success()
+    {
+        var db = new MovieDbContext();
+        var bookmarkWithPersonAndTitle = db.Bookmarks
+            .Include(x => x.Person)
+            .Include(x => x.Title)
+            .First(x => x.Id == 57);
+        _testOutputHelper.WriteLine($"Title: {bookmarkWithPersonAndTitle.Title}\nPerson: {bookmarkWithPersonAndTitle.Person}");
+        
+        Assert.Equal("Mark Hamill", bookmarkWithPersonAndTitle.Person.Name);
     }
 }

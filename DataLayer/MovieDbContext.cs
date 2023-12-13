@@ -14,7 +14,7 @@ public class MovieDbContext : DbContext
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Profession> Professions { get; set; }
     public DbSet<Wi> Wi { get; set; }
-    
+
 
     // Framework database
     public DbSet<User> Users { get; set; }
@@ -55,7 +55,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<HasGenre>().ToTable("has_genre")
             .HasKey(x => new { x.Id, x.Tconst });
         modelBuilder.Entity<HasGenre>().Property(x => x.Id).HasColumnName("id");
-        
+
         modelBuilder.Entity<Title>()
             .HasMany(x => x.Genre)
             .WithMany(x => x.Title)
@@ -76,7 +76,7 @@ public class MovieDbContext : DbContext
             .HasOne(x => x.Person)
             .WithMany(x => x.Crews)
             .HasForeignKey(x => x.Nconst);
-        
+
         modelBuilder.Entity<Alias>().ToTable("aliases").HasKey(x => new { x.Tconst, x.Ordering });
 
         modelBuilder.Entity<IsEpisodeOf>().ToTable("is_episode_of").HasKey(x => new { x.Tconst, x.ParentTconst });
@@ -92,7 +92,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
 
         modelBuilder.Entity<BestMatch>().HasNoKey();
-        
+
         // Framework database
         modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
 
@@ -109,5 +109,15 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Rating>().Property(x => x.ThisRating).HasColumnName("rating");
 
         modelBuilder.Entity<Bookmark>().ToTable("bookmark");
+        modelBuilder.Entity<Bookmark>(entity =>
+        {
+            entity.HasOne(x => x.Title)
+                .WithMany(x => x.Bookmarks)
+                .HasForeignKey(x => x.Tconst);
+            
+            entity.HasOne(x => x.Person)
+                .WithMany(x => x.Bookmarks)
+                .HasForeignKey(x => x.Nconst);
+        });
     }
 }
