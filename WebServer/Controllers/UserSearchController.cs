@@ -23,12 +23,13 @@ public class UserSearchController : GenericControllerBase
         _dataService = dataService;
     }
 
-    [HttpDelete]
+    [HttpDelete(Name = nameof(DeleteSearch))]
     public IActionResult DeleteSearch(int userId, string searchPhrase)
     {
         if (userId != UserId) return Unauthorized();
         _dataService.DeleteSearch(userId, searchPhrase);
         return Ok("Search Deleted");
+
     }
 
     [HttpDelete("clear")]
@@ -73,6 +74,7 @@ public class UserSearchController : GenericControllerBase
         searchDto.User = GetUrl(nameof(UsersController.GetUser), new { search.Id });
         searchDto.SearchPhrase = search.SearchPhrase;
         searchDto.Date = search.Date;
+        searchDto.DeleteUrl = GetUrl(nameof(DeleteSearch), new { userId = search.Id, search.SearchPhrase });
         return searchDto;
     }
 

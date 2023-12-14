@@ -145,7 +145,7 @@ public class UsersController : GenericControllerBase
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-        return Ok(new { user.Username, user.Id, token = jwt });
+        return Ok(new { user.Username, user.Id, token = jwt }); 
     }
 
     private UserDto MapUser(User user)

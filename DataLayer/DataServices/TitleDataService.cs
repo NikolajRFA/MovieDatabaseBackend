@@ -10,7 +10,7 @@ namespace DataLayer.DataServices;
 public class TitleDataService
 {
     public (List<Title> titles, int count) GetTitles(int page, int pageSize)
-    {
+    {   
         var db = new MovieDbContext();
         var count = db.Titles.Count();
         var titles =
