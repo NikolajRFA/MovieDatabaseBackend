@@ -21,7 +21,10 @@ public class BookmarkDataService
     public List<Bookmark> GetBookmarks(int userId)
     {
         var db = new MovieDbContext();
-        return db.Bookmarks.Where(x => x.UserId == userId).ToList();
+        return db.Bookmarks
+            .Include(x => x.Person)
+            .Include(x => x.Title)
+            .Where(x => x.UserId == userId).ToList();
     }
 
     public Bookmark? GetBookmark(int id)

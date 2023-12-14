@@ -18,4 +18,5 @@ public class Title
     public List<Crew> Crew { get; set; }
     public List<Alias> Aliases { get; set; }
     public List<IsEpisodeOf> IsEpisodeOfs { get; set; }
+    public List<Bookmark> Bookmarks { get; set; }
 }

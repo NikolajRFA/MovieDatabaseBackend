@@ -37,8 +37,10 @@ public class UserBookmarksController : GenericControllerBase
             {
                 Url = GetUrl(nameof(GetBookmark), new { UserId, bookmark.Id }),
                 User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
-                Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
-                Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
+                Tconst = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
+                Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() }),
+                PersonName = bookmark.Person?.Name,
+                Title = bookmark.Title?.PrimaryTitle
             });
         });
 
@@ -57,7 +59,7 @@ public class UserBookmarksController : GenericControllerBase
             Url = GetUrl(nameof(GetBookmark), new { UserId, bookmark.Id }),
             User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
             Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = bookmark.Tconst?.Trim() }),
-            Person = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
+            Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = bookmark.Nconst?.Trim() })
         };
         return Ok(dto);
     }

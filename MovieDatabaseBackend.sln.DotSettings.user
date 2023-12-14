@@ -16,6 +16,7 @@
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.TitleDataServiceTests.GetBestMatches_StarWarsRevengeSith_ReturnsTt0121766&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.TitleDataServiceTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.UserDataServiceTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.PersonDataServiceTests.GetTitlesFromPerson_ValidInput_Success&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e581a7ff_002De669_002D4e15_002Da63e_002Ddd40ec8776ee/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetFirstRatingFromUser_UserNiko_GetRating" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -24,5 +25,7 @@
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.TitleDataServiceTests.GetBestMatches_StarWarsRevengeSith_ReturnsTt0121766&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.TitleDataServiceTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.UserDataServiceTests.CreateUser_CompletelyNewUser_CorrectlyCreatesUser&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.DataServiceTests.PersonDataServiceTests.GetTitlesFromPerson_ValidInput_Success&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::E7C971E3-45BC-4329-BB66-B4CF5C5DC786::net7.0::DataLayerTests.MovieDbContextTests.GetBookmark_WithTitle_Success&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

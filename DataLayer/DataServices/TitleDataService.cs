@@ -88,6 +88,8 @@ public class TitleDataService
     private (List<BestMatch>, int) BestMatchSearch(MovieDbContext db, string search, int page, int pageSize,
         int? userId = null)
     {
+        // Lower search string as SQL function only takes lower strings.
+        search = search.ToLower();
         var qStrings = search.Split(" ");
         // Sanitize input
         qStrings = qStrings.Select(x => Regex.Replace(x, @"'", "''")).ToArray();

@@ -40,11 +40,31 @@ public class PersonsController : GenericControllerBase
         return Ok(Paging(dtos, total, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetPersons)));
     }
 
+    [HttpGet("{nconst}/titles", Name = nameof(GetTitlesFromPerson))]
+    public IActionResult GetTitlesFromPerson(string nconst, int page = 0, int pageSize = 10)
+    {
+        var (titles, total) = _dataService.GetTitlesFromPerson(nconst, page, pageSize);
+        List<TitleDto> dtos = new();
+        foreach (var title in titles)
+        {
+            dtos.Add(MapTitle(title));
+        }
+
+        return Ok(Paging(dtos, total, new NconstPagingValues {Nconst = nconst, Page = page, PageSize = pageSize },
+            nameof(GetTitlesFromPerson)));
+    }
+
     private PersonDto MapPerson(Person person)
     {
         var dto = Mapper.Map<PersonDto>(person);
         dto.Url = GetUrl(nameof(GetPerson), new { nconst = person.Nconst.Trim() });
         dto.Professions = Mapper.Map<List<ProfessionDto>>(person.Professions);
+        dto.TitlesUrl = GetUrl(nameof(GetTitlesFromPerson), new { nconst = person.Nconst.Trim() });
         return dto;
+    }
+    
+    private class NconstPagingValues : PagingValues
+    {
+        public string Nconst { get; set; }
     }
 }

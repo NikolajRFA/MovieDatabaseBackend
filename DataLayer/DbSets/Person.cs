@@ -9,4 +9,5 @@ public class Person
     public double NameRating { get; set; }
     public List<Profession> Professions { get; set; }
     public List<Crew> Crews { get; set; }
+    public List<Bookmark> Bookmarks { get; set; }
 }
