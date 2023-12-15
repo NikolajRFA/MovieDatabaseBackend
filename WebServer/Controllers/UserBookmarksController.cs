@@ -64,6 +64,39 @@ public class UserBookmarksController : GenericControllerBase
         return Ok(dto);
     }
     
+    [HttpGet("title/{id}", Name = nameof(GetTitleBookmark))]
+    public IActionResult GetTitleBookmark(int userId, string id)
+    {
+        var titleBookmark = _dataService.GetTitleBookmark(userId, id);
+        if (titleBookmark == null) return NotFound();
+        if (titleBookmark.UserId != UserId) return Unauthorized();
+        var dto = new BookmarkDto
+        {
+            Url = GetUrl(nameof(GetTitleBookmark), new { UserId, id }),
+            User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
+            Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = titleBookmark.Tconst?.Trim() }),
+            Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = titleBookmark.Nconst?.Trim() })
+        };
+        return Ok(dto);
+    }
+
+    [HttpGet("person/{id}", Name = nameof(GetPersonBookmark))]
+    public IActionResult GetPersonBookmark(int userId, string id)
+    {
+        var personBookmark = _dataService.GetPersonBookmark(userId, id);
+        if (personBookmark == null) return NotFound();
+        if (personBookmark.UserId != UserId) return Unauthorized();
+        var dto = new BookmarkDto
+        {
+            Url = GetUrl(nameof(GetPersonBookmark), new { UserId, id }),
+            User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
+            Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = personBookmark.Tconst?.Trim() }),
+            Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = personBookmark.Nconst?.Trim() }),
+            PersonName = personBookmark.Person?.Name
+        };
+        return Ok(dto);
+    }
+    
     [HttpDelete("{id:int}", Name = nameof(DeleteBookmark))]
     public IActionResult DeleteBookmark(int id)
     {

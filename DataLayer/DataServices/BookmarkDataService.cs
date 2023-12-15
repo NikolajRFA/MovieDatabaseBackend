@@ -41,4 +41,20 @@ public class BookmarkDataService
         db.Bookmarks.Remove(bookmark);
         db.SaveChanges();
     }
+
+    public Bookmark? GetTitleBookmark(int userId, string id)
+    {
+        var db = new MovieDbContext();
+        return db.Bookmarks
+            .Include(x => x.Title)
+            .FirstOrDefault(x => x.UserId == userId && x.Tconst == id);
+    }
+
+    public Bookmark? GetPersonBookmark(int userId, string id)
+    {
+        var db = new MovieDbContext();
+        return db.Bookmarks
+            .Include(x => x.Person)
+            .FirstOrDefault(x => x.UserId == userId && x.Nconst.Equals(id));
+    }
 }

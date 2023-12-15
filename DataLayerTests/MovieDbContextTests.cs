@@ -177,4 +177,20 @@ public class MovieDbContextTests
         
         Assert.Equal("Mark Hamill", bookmarkWithPersonAndTitle.Person.Name);
     }
+
+    [Fact]
+    public void GetPersonBookmark_WithPersonAndUser_Success()
+    {
+        var dataService = new BookmarkDataService();
+        var bookmarkWithPersonAndUser = dataService.GetPersonBookmark(35, "nm0000434");
+        Assert.Equal("Mark Hamill", bookmarkWithPersonAndUser.Person.Name);
+    }
+
+    [Fact]
+    public void GetTitleBookmark_WithTitleAndUser_Success()
+    {
+        var dataService = new BookmarkDataService();
+        var bookmarkWithTitleAndUser = dataService.GetTitleBookmark(35, "tt0098936");
+        Assert.Equal("Twin Peaks", bookmarkWithTitleAndUser.Title.PrimaryTitle);
+    }
 }
