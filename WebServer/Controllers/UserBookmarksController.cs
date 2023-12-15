@@ -68,11 +68,11 @@ public class UserBookmarksController : GenericControllerBase
     public IActionResult GetTitleBookmark(int userId, string id)
     {
         var titleBookmark = _dataService.GetTitleBookmark(userId, id);
-        if (titleBookmark == null) return NotFound();
+        if (titleBookmark == null) return Ok("No bookmark found");
         if (titleBookmark.UserId != UserId) return Unauthorized();
         var dto = new BookmarkDto
         {
-            Url = GetUrl(nameof(GetTitleBookmark), new { UserId, id }),
+            Url = GetUrl(nameof(GetBookmark), new { UserId, titleBookmark.Id }),
             User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
             Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = titleBookmark.Tconst?.Trim() }),
             Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = titleBookmark.Nconst?.Trim() })
@@ -83,12 +83,13 @@ public class UserBookmarksController : GenericControllerBase
     [HttpGet("person/{id}", Name = nameof(GetPersonBookmark))]
     public IActionResult GetPersonBookmark(int userId, string id)
     {
+        var bookmarked = false;
         var personBookmark = _dataService.GetPersonBookmark(userId, id);
-        if (personBookmark == null) return NotFound();
+        if (personBookmark == null) return Ok("No bookmark found");
         if (personBookmark.UserId != UserId) return Unauthorized();
         var dto = new BookmarkDto
         {
-            Url = GetUrl(nameof(GetPersonBookmark), new { UserId, id }),
+            Url = GetUrl(nameof(GetBookmark), new { UserId, personBookmark.Id }),
             User = GetUrl(nameof(UsersController.GetUser), new { id = UserId }),
             Title = GetUrl(nameof(TitlesController.GetTitle), new { tconst = personBookmark.Tconst?.Trim() }),
             Nconst = GetUrl(nameof(PersonsController.GetPerson), new { nconst = personBookmark.Nconst?.Trim() }),
