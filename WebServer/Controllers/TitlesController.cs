@@ -45,7 +45,7 @@ public class TitlesController : GenericControllerBase
         }
 
         return Ok(Paging(episodeDtos, total,
-            new TconstPagingValues { Tconst = tconst, Page = page, PageSize = pageSize }, nameof(GetEpisodesOfSeries)));
+            new EpisodesPagingValues { Tconst = tconst, Page = page, PageSize = pageSize, Season = season }, nameof(GetEpisodesOfSeries)));
     }
     
 
@@ -143,4 +143,10 @@ public class TitlesController : GenericControllerBase
     {
         public string Tconst { get; set; }
     }
+    
+    private class EpisodesPagingValues : TconstPagingValues
+    {
+        public int Season { get; set; }
+    }
+    
 }
