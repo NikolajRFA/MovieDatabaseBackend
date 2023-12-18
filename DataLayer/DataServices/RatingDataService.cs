@@ -24,6 +24,7 @@ namespace DataLayer.DataServices
             var db = new MovieDbContext();
             var count = db.Rated.Count(x => x.Id == userId);
             var ratings = db.Rated
+                .Include(x => x.Title)
                 .Where(x => x.Id == userId)
                 .Skip(page * pageSize)
                 .Take(pageSize)
@@ -35,6 +36,7 @@ namespace DataLayer.DataServices
         {
             var db = new MovieDbContext();
             return db.Rated
+                .Include(x => x.Title)
                 .FirstOrDefault(x => x.Tconst.Equals(tconst) && x.User.Id == userId);
         }
 

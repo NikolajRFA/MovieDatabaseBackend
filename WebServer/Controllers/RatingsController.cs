@@ -104,6 +104,7 @@ public class RatingsController : GenericControllerBase
         ratingDto.Url = GetUrl(nameof(GetRating), new { userId, Tconst = rating.Tconst.Trim() });
         ratingDto.User = GetUrl(nameof(UsersController.GetUser), new { rating.Id });
         ratingDto.Tconst = GetUrl(nameof(TitlesController.GetTitle), new { Tconst = rating.Tconst.Trim() });
+        ratingDto.Title = rating.Title.PrimaryTitle;
         ratingDto.Rating = rating.ThisRating;
         ratingDto.Date = rating.Date;
         return ratingDto;
