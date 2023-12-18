@@ -33,7 +33,6 @@ public class TitleDataService
 
     public (List<IsEpisodeOf>?, int) GetEpisodes(string tconst, int page = 0, int pageSize = 10, int season = 0)
     {
-        Console.WriteLine($"season: {season}");
         var db = new MovieDbContext();
         // If title is not a 'tvSeries'
         if (!db.Titles.First(x => x.Tconst.Equals(tconst.Trim())).TitleType.Equals("tvSeries")) return (null, 0);
