@@ -94,7 +94,12 @@ public class MovieDbContext : DbContext
 
         modelBuilder.Entity<BestMatch>().HasNoKey();
 
-        modelBuilder.Entity<PersonWithTotal>().HasNoKey();
+        modelBuilder.Entity<PersonWithTotal>(x =>
+        {
+            x.HasNoKey();
+            x.Property(x => x.Name).HasColumnName("personname");
+            x.Property(x => x.NameRating).HasColumnName("name_rating");
+        });
 
         // Framework database
         modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
