@@ -193,4 +193,13 @@ public class MovieDbContextTests
         var bookmarkWithTitleAndUser = dataService.GetTitleBookmark(35, "tt0098936");
         Assert.Equal("Twin Peaks", bookmarkWithTitleAndUser.Title.PrimaryTitle);
     }
+
+    [Fact]
+    public void GetPerson_WithPersonName_Success()
+    {
+        var dataService = new PersonDataService();
+        var personWithTitle = dataService.GetPersonsWithName("steve carell");
+        _testOutputHelper.WriteLine($"Person: {personWithTitle.Item1.First().Name}");
+        Assert.Equal("Steve Carell", personWithTitle.Item1.First().Name);
+    }
 }

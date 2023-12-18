@@ -40,6 +40,18 @@ public class PersonsController : GenericControllerBase
         return Ok(Paging(dtos, total, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetPersons)));
     }
 
+    [HttpGet("results", Name = nameof(GetPersonsWithName))]
+    public IActionResult GetPersonsWithName(string q, int page = 0, int pageSize = 10)
+    {
+        var (persons, total) = _dataService.GetPersonsWithName(q, page, pageSize);
+        List<PersonDto> dtos = new();
+        foreach (var person in persons)
+        {
+            dtos.Add(MapPerson(person));
+        }
+        return Ok(Paging(dtos, total, new PagingValues { Page = page, PageSize = pageSize }, nameof(GetPersonsWithName)));
+    }
+
     [HttpGet("{nconst}/titles", Name = nameof(GetTitlesFromPerson))]
     public IActionResult GetTitlesFromPerson(string nconst, int page = 0, int pageSize = 10)
     {

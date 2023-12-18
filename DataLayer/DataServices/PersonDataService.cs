@@ -13,6 +13,21 @@ public class PersonDataService
             .SingleOrDefault(x => x.Nconst.Equals(nconst));
     }
 
+    public (List<Person>, int) GetPersonsWithName(string name, int page = 0, int pageSize = 10)
+    {
+        var searchPhrases = name.Split(" ")
+            .Select(word => char.ToUpper(word[0]) + word.Substring(1))
+            .ToArray();
+    
+        var capitalizedName = string.Join(" ", searchPhrases);
+        
+        var db = new MovieDbContext();
+        var persons = db.Persons
+            .FromSqlRaw($"select * from string_search_person('{capitalizedName}')")
+            .ToList();
+        return (persons, persons.Count());
+    }
+
     public (List<Person>, int) GetPersons(int page = 0, int pageSize = 10)
     {
         var db = new MovieDbContext();
