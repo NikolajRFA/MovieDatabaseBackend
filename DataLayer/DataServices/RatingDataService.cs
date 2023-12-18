@@ -34,7 +34,8 @@ namespace DataLayer.DataServices
         public Rating? GetRating(string tconst, int userId)
         {
             var db = new MovieDbContext();
-            return db.Rated.FirstOrDefault(x => x.Tconst.Equals(tconst) && x.User.Id == userId);
+            return db.Rated
+                .FirstOrDefault(x => x.Tconst.Equals(tconst) && x.User.Id == userId);
         }
 
 

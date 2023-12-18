@@ -31,7 +31,7 @@ public class RatingsController : GenericControllerBase
         if (UserId != userId) return Unauthorized();
         var rating = _dataService.GetRating(tconst, userId);
         if (rating == null) return NotFound();
-        _dataService.DeleteRating(rating.User.Id, rating.Tconst);
+        _dataService.DeleteRating(rating.Id, rating.Tconst);
         return Ok();
     }
 
