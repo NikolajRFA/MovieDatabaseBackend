@@ -23,7 +23,7 @@ public class PersonDataService
         
         var db = new MovieDbContext();
         var persons = db.Persons
-            .FromSqlRaw($"select * from string_search_person('{capitalizedName}')")
+            .FromSqlRaw($"select * from string_search_person('{capitalizedName}', {page}, {pageSize})")
             .ToList();
         return (persons, persons.Count());
     }
