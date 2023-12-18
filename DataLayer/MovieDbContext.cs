@@ -8,7 +8,6 @@ public class MovieDbContext : DbContext
     // Movie database
     public DbSet<Title> Titles { get; set; }
     public DbSet<Person> Persons { get; set; }
-
     public DbSet<PersonWithTotal> PersonsWithTotals { get; set; }
     public DbSet<Crew> Crew { get; set; }
     public DbSet<Alias> Aliases { get; set; }
@@ -94,6 +93,8 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Wi>().ToTable("wi").HasKey(x => new { x.Tconst, x.Word, x.Field });
 
         modelBuilder.Entity<BestMatch>().HasNoKey();
+
+        modelBuilder.Entity<PersonWithTotal>().HasNoKey();
 
         // Framework database
         modelBuilder.Entity<Search>().ToTable("searches").HasKey(x => new { x.Id, x.SearchPhrase, x.Date });
