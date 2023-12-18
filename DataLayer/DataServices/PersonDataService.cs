@@ -16,11 +16,11 @@ public class PersonDataService
     public (List<Person>, int) GetPersonsWithName(string name, int page = 0, int pageSize = 10)
     {
         var searchPhrases = name.Split(" ")
-            .Select(word => char.ToUpper(word[0]) + word.Substring(1))
+            .Select(word => !string.IsNullOrEmpty(word) ? char.ToUpper(word[0]) + word.Substring(1) : string.Empty)
             .ToArray();
-    
+
         var capitalizedName = string.Join(" ", searchPhrases);
-        
+
         var db = new MovieDbContext();
         var personsWithTotals = db.PersonsWithTotals
             .FromSqlRaw($"select * from string_search_person('{capitalizedName}', {page}, {pageSize})")
@@ -38,8 +38,8 @@ public class PersonDataService
             });
         }
 
-        var total = personsWithTotals.FirstOrDefault() != null ? personsWithTotals.FirstOrDefault()!.Total : 0; 
-        
+        var total = personsWithTotals.FirstOrDefault() != null ? personsWithTotals.FirstOrDefault()!.Total : 0;
+
         return (persons, total);
     }
 

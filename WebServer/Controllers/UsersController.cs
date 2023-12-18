@@ -82,6 +82,7 @@ public class UsersController : GenericControllerBase
         if (user.Id != UserId) return Unauthorized();
         var (hashedPwd, salt) = _hashing.Hash(model.Password);
         var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, hashedPwd, salt, model.Role);
+        if (updatedUser == null) return Conflict("Email is already in use");
         var dto = MapUser(updatedUser);
         return Ok(dto);
     }

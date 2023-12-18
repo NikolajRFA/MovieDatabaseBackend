@@ -57,9 +57,10 @@ public class UserDataService
         return !db.Users.Any(x => x.Id == id);
     }
 
-    public User UpdateUser(int id, string username, string email, string hashedPassword, string salt, string role)
+    public User? UpdateUser(int id, string username, string email, string hashedPassword, string salt, string role)
     {
         var db = new MovieDbContext();
+        if (db.Users.FirstOrDefault(x => x.Email.Equals(email)) != null) return null;
         db.Database.ExecuteSqlRaw($"call update_user({id}, '{username}', '{email}', '{hashedPassword}', '{salt}', '{role}')");
         var user = db.Users
             .Include(x => x.Searches)
