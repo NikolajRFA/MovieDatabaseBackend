@@ -22,10 +22,25 @@ public class PersonDataService
         var capitalizedName = string.Join(" ", searchPhrases);
         
         var db = new MovieDbContext();
-        var persons = db.Persons
+        var personsWithTotals = db.PersonsWithTotals
             .FromSqlRaw($"select * from string_search_person('{capitalizedName}', {page}, {pageSize})")
             .ToList();
-        return (persons, persons.Count());
+        var persons = new List<Person>();
+        foreach (var personWithTotal in personsWithTotals)
+        {
+            persons.Add(new Person
+            {
+                Nconst = personWithTotal.Nconst,
+                Name = personWithTotal.Name,
+                BirthYear = personWithTotal.BirthYear,
+                DeathYear = personWithTotal.DeathYear,
+                NameRating = personWithTotal.NameRating
+            });
+        }
+
+        var total = personsWithTotals.FirstOrDefault() != null ? personsWithTotals.FirstOrDefault()!.Total : 0; 
+        
+        return (persons, total);
     }
 
     public (List<Person>, int) GetPersons(int page = 0, int pageSize = 10)

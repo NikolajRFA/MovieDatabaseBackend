@@ -8,6 +8,8 @@ public class MovieDbContext : DbContext
     // Movie database
     public DbSet<Title> Titles { get; set; }
     public DbSet<Person> Persons { get; set; }
+
+    public DbSet<PersonWithTotal> PersonsWithTotals { get; set; }
     public DbSet<Crew> Crew { get; set; }
     public DbSet<Alias> Aliases { get; set; }
     public DbSet<IsEpisodeOf> IsEpisodeOf { get; set; }
