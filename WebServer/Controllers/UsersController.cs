@@ -80,7 +80,7 @@ public class UsersController : GenericControllerBase
         var user = _dataService.GetUser(id);
         if (user == null) return NotFound();
         if (user.Id != UserId) return Unauthorized();
-        var (hashedPwd, salt) = _hashing.Hash(model.Password);
+        var (hashedPwd, salt) = !string.IsNullOrEmpty(model.Password) ? _hashing.Hash(model.Password) : (null, null);
         var updatedUser = _dataService.UpdateUser(id, model.Username, model.Email, hashedPwd, salt, model.Role);
         if (updatedUser == null) return Conflict("Email is already in use");
         var dto = MapUser(updatedUser);
